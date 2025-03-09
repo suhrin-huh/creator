@@ -18,7 +18,7 @@ const Home = () => {
       />
       <TimeSelector
         selectedDate={selectedDate}
-        onSelectDate={setSelectedDate}
+        // onSelectDate={setSelectedDate}
       />
     </>
   );

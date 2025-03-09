@@ -17,17 +17,17 @@ const fetchReservations = async (selectedDate: string) => {
 
 const TimeSelector = ({
   selectedDate,
-  onSelectDate,
-}: {
+}: // onSelectDate,
+{
   selectedDate: string;
-  onSelectDate: (date: string) => void;
+  // onSelectDate: (date: string) => void;
 }) => {
   // const queryClient = useQueryClient();
   const [selectedPeriod, setSelectedPeriod] = useState<"AM" | "PM">("AM");
   const [selectedHour, setSelectedHour] = useState<number | null>(null);
 
   // ✅ 예약된 시간 불러오기 (React Query)
-  const { data: reservedTimes = [], refetch } = useQuery({
+  const { data: reservedTimes = [] } = useQuery({
     queryKey: ["reservations", selectedDate],
     queryFn: () => fetchReservations(selectedDate),
     staleTime: 0, // ✅ 항상 최신 데이터를 불러오기

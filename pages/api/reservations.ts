@@ -18,7 +18,7 @@ export default async function handler(
 
 // 📌 예약 조회 (GET)
 async function getReservations(req: NextApiRequest, res: NextApiResponse) {
-  let { date } = req.query;
+  const { date } = req.query;
 
   // ✅ date 값이 배열인지 확인 후 문자열로 변환
   if (!date || Array.isArray(date)) {
