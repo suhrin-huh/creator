@@ -20,33 +20,31 @@ export default async function handler(
 async function getReservations(req: NextApiRequest, res: NextApiResponse) {
   const { date } = req.query;
 
-  // ✅ date 값이 배열인지 확인 후 문자열로 변환
   if (!date || Array.isArray(date)) {
     return res
       .status(400)
       .json({ error: "Date parameter is required and must be a string" });
   }
 
-  // ✅ 날짜 형식을 'YYYY-MM-DD'로 변환
-  const formattedDate = new Date(date).toISOString().split("T")[0];
+  // ✅ 날짜 형식 확인 및 변환
+  const formattedDate = date.toString(); // 변환 필요
 
-  console.log("Fetching reservations for date:", formattedDate); // 디버깅 로그
+  console.log("📌 Fetching reservations for date:", formattedDate); // 디버깅 로그
 
   const { data, error } = await supabase
     .from("reservations")
     .select("date, period, hour")
-    .eq("date", formattedDate); // ✅ date는 text이므로 그대로 비교
+    .eq("date", formattedDate);
 
   if (error) {
-    console.error("Error fetching reservations:", error.message);
+    console.error("❌ Error fetching reservations:", error.message);
     return res.status(500).json({ error: error.message });
   }
 
-  // if (!data || data.length === 0) {
-  //   return res
-  //     .status(404)
-  //     .json({ message: "No reservations found for this date" });
-  // }
+  // ✅ Supabase에서 반환된 데이터가 `null`이면 빈 배열 반환
+  if (!data) {
+    return res.status(200).json([]); // `null` 대신 빈 배열 반환
+  }
 
   return res.status(200).json(data);
 }
@@ -59,7 +57,7 @@ async function createReservation(req: NextApiRequest, res: NextApiResponse) {
     return res.status(400).json({ error: "Missing required fields" });
   }
 
-  // 이미 예약된 시간인지 확인
+  // ✅ 기존 예약 확인
   const { data: existingReservation, error: checkError } = await supabase
     .from("reservations")
     .select("id")
@@ -78,7 +76,7 @@ async function createReservation(req: NextApiRequest, res: NextApiResponse) {
       .json({ error: "This time slot is already reserved" });
   }
 
-  // 예약 추가
+  // ✅ 예약 추가
   const { data, error } = await supabase
     .from("reservations")
     .insert([{ date, period, hour }]);
@@ -87,5 +85,8 @@ async function createReservation(req: NextApiRequest, res: NextApiResponse) {
     return res.status(500).json({ error: error.message });
   }
 
-  return res.status(201).json({ message: "Reservation created", data });
+  // ✅ `data`가 `null`일 경우 빈 객체 반환
+  return res
+    .status(201)
+    .json({ message: "Reservation created", data: data || {} });
 }
