@@ -9,9 +9,10 @@ import { ChangeEvent } from "react";
 interface SearchInputProps {
   value: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onClick: () => void;
 }
 
-export default function SearchInput({ value, onChange }: SearchInputProps) {
+export default function SearchInput({ value, onChange, onClick }: SearchInputProps) {
   return (
     <div className="w-full">
       <div className="px-lg py-md gap-x-sm flex w-full items-center justify-center rounded-full bg-white shadow-md">
@@ -24,7 +25,11 @@ export default function SearchInput({ value, onChange }: SearchInputProps) {
           value={value}
           onChange={onChange}
         />
-        <button className="p-sm rounded-full hover:bg-gray-300/30 active:scale-75" id="clearButton">
+        <button
+          className="p-sm rounded-full hover:bg-gray-300/30 active:scale-75"
+          id="clear-button"
+          onClick={onClick}
+        >
           <MdClear size={20} className="pointer-none text-gray-400" />
         </button>
       </div>

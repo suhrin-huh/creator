@@ -46,9 +46,13 @@ export default function ProductSection() {
     setKeyword(e.target.value);
   };
 
+  const handleClear = () => {
+    setKeyword("");
+  };
+
   return (
     <section className="gap-y-lg flex flex-col items-center">
-      <SearchInput value={keyword} onChange={handleChange} />
+      <SearchInput value={keyword} onChange={handleChange} onClick={handleClear} />
       <ProductList productList={productList} />
     </section>
   );
