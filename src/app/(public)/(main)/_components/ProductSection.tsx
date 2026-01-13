@@ -3,6 +3,9 @@
 // library
 import { ChangeEvent, useState, useEffect } from "react";
 
+// hooks
+import useDebounce from "@/hooks/useDebounce";
+
 // components
 import SearchInput from "./SearchInput";
 import ProductList from "./ProductList";
@@ -28,13 +31,16 @@ const PRODUCT_LIST = [
 
 export type Product = (typeof PRODUCT_LIST)[number];
 
+const DEBOUNCE_DELAY = 200;
+
 export default function ProductSection() {
   const [keyword, setKeyword] = useState("");
+  const debouncedKeyword = useDebounce(keyword, DEBOUNCE_DELAY);
   const [productList, setProductList] = useState(PRODUCT_LIST);
 
   useEffect(() => {
-    setProductList(PRODUCT_LIST.filter((product) => product.title.includes(keyword)));
-  }, [keyword]);
+    setProductList(PRODUCT_LIST.filter((product) => product.title.includes(debouncedKeyword)));
+  }, [debouncedKeyword]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setKeyword(e.target.value);
