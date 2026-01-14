@@ -19,7 +19,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
-        <div>{children}</div>
+        <div className="flex h-dvh min-h-100 justify-center md:py-4">{children}</div>
       </body>
     </html>
   );

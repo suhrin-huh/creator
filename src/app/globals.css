@@ -97,3 +97,11 @@
   --text-caption: 0.625rem; /* 10px */
   --text-caption--line-height: 1rem; /* 16px */
 }
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE, Edge */
+  scrollbar-width: none; /* Firefox */
+}
