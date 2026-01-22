@@ -1,80 +1,85 @@
 @import "tailwindcss";
 
 @theme {
-  /* color */
-  /* Primary Colors - 올리브 그린 베이스 */
-  --color-primary: #abc270;
-  --color-primary-light: #c1d48e;
-  --color-primary-dark: #7a8f4a;
-  --color-primary-hover: #b8cc7e;
-  --color-primary-active: #99b35e;
-  --color-primary-focus: #abc270;
+  /* =========================================
+     Color Palette: 'Daily Cha' Cafe Theme
+     Concept: Matcha, Milk, Blue Sky, Coffee
+     ========================================= */
 
-  /* Secondary Colors - 골든 옐로우 */
-  --color-secondary: #fec868;
-  --color-secondary-light: #ffd689;
-  --color-secondary-dark: #e5b04f;
-  --color-secondary-hover: #ffd07a;
-  --color-secondary-active: #edb857;
+  /* 1. Primary Colors - Matcha Green (#98AD57 Base) */
+  /* 긍정적, 자연, 메인 액션 */
+  --color-primary: #98ad57;
+  --color-primary-light: #b4c57e;
+  --color-primary-dark: #768a41;
+  --color-primary-hover: #899e4d;
+  --color-primary-active: #667838;
+  --color-primary-focus: #98ad57;
 
-  /* Accent Colors - 피치 오렌지 */
-  --color-accent: #fda769;
-  --color-accent-light: #ffba87;
-  --color-accent-dark: #e58e4f;
-  --color-accent-hover: #ffb17b;
-  --color-accent-active: #eb9657;
+  /* 2. Secondary Colors - Soft Sky Blue (#AEC7E0 Base) */
+  /* 신선함, 강조, 포인트 뱃지 */
+  --color-secondary: #aec7e0;
+  --color-secondary-light: #dbebf7;
+  --color-secondary-dark: #819ebb;
+  --color-secondary-hover: #9abddb;
+  --color-secondary-active: #6f8ea8;
 
-  /* Neutral Colors - 다크 브라운 & 베이지 */
-  --color-white: #ffffff;
-  --color-gray-50: #faf8f3;
-  --color-gray-100: #f5f2e8;
-  --color-gray-200: #ebe6d7;
-  --color-gray-300: #d9d1be;
-  --color-gray-400: #b8af9a;
-  --color-gray-500: #8f8672;
-  --color-gray-600: #6b6451;
-  --color-gray-700: #473c33;
-  --color-gray-800: #3d342c;
-  --color-gray-900: #2b2520;
+  /* 3. Accent Colors - Coffee Brown (#563526 Base) */
+  /* 중요 강조, 다크 모드 대응, 텍스트 강조 */
+  --color-accent: #563526;
+  --color-accent-light: #7d5a4a;
+  --color-accent-dark: #3b2319;
+  --color-accent-hover: #6b4635;
+  --color-accent-active: #2e1b12;
 
-  /* Semantic Colors */
-  --color-success: #abc270;
-  --color-success-light: #c1d48e;
-  --color-success-dark: #8fa856;
-  --color-danger: #e57a6b;
-  --color-danger-light: #f39688;
-  --color-danger-dark: #cc6456;
-  --color-warning: #fec868;
-  --color-warning-light: #ffd689;
-  --color-warning-dark: #e5b04f;
-  --color-info: #9baab8;
-  --color-info-light: #b5c2cf;
-  --color-info-dark: #7a8895;
+  /* 4. Neutral Colors - Cream & Brown Scale */
+  --color-white: #FDFBF7;
+  --color-black: #2C221C;
+  
+  /* 배경 베이스 (아주 연한 크림) */
+  --color-gray-50: #fbf9f4; 
+  --color-gray-100: #f0ead8;   /* 베이지 (#F0EAD8) - 카드 배경, 헤더 */
+  /* 보더, 구분선 (연한 라떼색) */
+  --color-gray-200: #e3dbc5; 
+  --color-gray-300: #d1c6ad; 
+  /* 비활성 텍스트 (중간 브라운) */
+  --color-gray-400: #af9f8c; 
+  --color-gray-500: #8f7e6d; 
+  /* 본문 텍스트 (진한 브라운) */
+  --color-gray-600: #6e5646; 
+  --color-gray-700: #563526; /* 다크 브라운 (#563526) */
+  --color-gray-800: #42281c; 
+  --color-gray-900: #2b1911; 
 
-  /* spacing */
-  --spacing-xs: 0.25rem; /*  4*/
-  --spacing-sm: 0.375rem; /*  6*/
-  --spacing-md: 0.5rem; /*  8*/
-  --spacing-lg: 1rem; /* 16 */
-  --spacing-xl: 1.5rem; /* 24 */
-  --spacing-2xl: 2rem; /* 32 */
-  --spacing-3xl: 2.5rem; /* 32 */
+  /* 5. Semantic Colors */
+  --color-success: #98ad57; /* Matcha */
+  --color-success-light: #e6edd6;
+  --color-info: #aec7e0;    /* Blue */
+  --color-info-light: #ebf3fa;
+  --color-warning: #eebb4d; /* Warm Yellow */
+  --color-warning-light: #fcf4db;
+  --color-danger: #d9756c;  /* Soft Red */
+  --color-danger-light: #fae6e4;
 
-  /* Border Radius */
-  --radius-sm: 0.25rem; /* 4px */
-  --radius-md: 0.5rem; /* 8px */
-  --radius-lg: 1rem; /* 16px */
-  --radius-xl: 1.5rem; /* 24px */
-  --radius-2xl: 2rem; /* 32px */
-  --radius-full: 9999px; /* Full round */
+  /* 6. Spacing & Radius */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.375rem;
+  --spacing-md: 0.5rem;
+  --spacing-lg: 1rem;
+  --spacing-xl: 1.5rem;
+  --spacing-2xl: 2rem;
+  --spacing-3xl: 2.5rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-full: 9999px;
 
-  /* Shadows */
-  --shadow-sm: 0 2px 4px rgba(75, 60, 51, 0.1);
-  --shadow-md: 0 4px 12px rgba(75, 60, 51, 0.15);
-  --shadow-lg: 0 10px 30px rgba(75, 60, 51, 0.2);
-  --shadow-xl: 0 15px 40px rgba(75, 60, 51, 0.25);
+  /* 7. Shadows (따뜻한 브라운 그림자) */
+  --shadow-sm: 0 1px 2px 0 rgba(86, 53, 38, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(86, 53, 38, 0.08);
+  --shadow-lg: 0 10px 15px -3px rgba(86, 53, 38, 0.1);
 
-  /* text */
+  /* 8. Text */
   /* Heading styles */
   --text-h1: 2.25rem; /* 36px */
   --text-h1--line-height: 2.75rem; /* 44px */
@@ -86,10 +91,8 @@
   /* Body styles */
   --text-body-lg: 1rem; /* 16px */
   --text-body--line-height: 1.5rem; /* 24px */
-
   --text-body-md: 0.875rem; /* 14px */
   --text-body-md--line-height: 1.25rem; /* 20px */
-
   --text-body-sm: 0.75rem; /* 12px */
   --text-body-sm--line-height: 1rem; /* 16px */
 
