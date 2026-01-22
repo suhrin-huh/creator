@@ -13,6 +13,7 @@
     "@emotion/styled": "^11.14.1",
     "@mui/material": "^7.3.7",
     "@mui/x-charts": "^8.26.0",
+    "@mui/x-data-grid": "^8.27.0",
     "next": "15.5.9",
     "react": "19.1.0",
     "react-dom": "19.1.0",
