@@ -9,7 +9,7 @@ export default function MainContainer() {
     <div className="hide-scrollbar relative flex max-w-175 min-w-75 flex-1 flex-col overflow-scroll md:rounded-lg md:shadow-xl">
       <Header />
       {/* 메인 컨텐츠 */}
-      <main className="gap-y-xl p-xl bg-primary flex min-w-87.5 flex-1 flex-col">
+      <main className="gap-y-xl p-xl bg-gray-200 flex min-w-87.5 flex-1 flex-col">
         {/* 프로필 */}
         <ProfileSection />
         {/* 광고제품 리스트 */}

@@ -7,7 +7,7 @@ export default function Header() {
   // ];
 
   return (
-    <header className="sticky top-0 z-10 bg-white shadow-sm md:rounded-t-lg">
+    <header className="sticky top-0 z-10 bg-white shadow-md md:rounded-t-lg">
       <nav className="p-lg flex flex-col items-center justify-between md:flex-row">
         <div className="logo text-h3 text-primary font-bold">Creator</div>
         {/* <ul className="nav-links gap-x-md flex">
