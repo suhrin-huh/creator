@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import { DataGrid, GridRowParams, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { Button, Chip } from "@mui/material";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 
 // 상품 타입 정의
 interface Product {
@@ -58,6 +59,10 @@ const generateMockData = (): Product[] => {
 };
 
 export default function ProductsPage() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   const [products] = useState<Product[]>(generateMockData());
 
   // 컬럼 정의
@@ -145,6 +150,14 @@ export default function ProductsPage() {
     },
   ];
 
+  // 
+  // 행 클릭 핸들러: Modal 컨트롤, URL 변경시 @modal/page.tsx가 이를 감지해 자동으로 뜬다
+  const handleRowClick = (params: GridRowParams<Product>) => {
+    const newParams = new URLSearchParams(searchParams.toString());
+    newParams.set("productId", params.id.toString());
+    router.replace(`${pathname}?${newParams.toString()}`, { scroll: false });
+  };
+
   return (
     <div className="hide-scrollbar text-black bg-gray-50 relative flex h-dvh w-full flex-col overflow-hidden">
       {/* Header */}
@@ -202,6 +215,7 @@ export default function ProductsPage() {
             }}
             pageSizeOptions={[10, 15, 30, 50]}
             // disableRowSelectionOnClick
+            onRowClick={handleRowClick} // 클릭 시 URL만 바꿔줌
             rowHeight={60}
             sx={{
               border: "none",
