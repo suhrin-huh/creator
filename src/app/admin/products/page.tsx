@@ -154,7 +154,15 @@ export default function ProductsPage() {
   // 행 클릭 핸들러: Modal 컨트롤, URL 변경시 @modal/page.tsx가 이를 감지해 자동으로 뜬다
   const handleRowClick = (params: GridRowParams<Product>) => {
     const newParams = new URLSearchParams(searchParams.toString());
+    newParams.set("action", "edit");
     newParams.set("productId", params.id.toString());
+    router.replace(`${pathname}?${newParams.toString()}`, { scroll: false });
+  };
+
+  // 상품 추가하기 버튼 클릭 핸들러
+  const handleAddProduct = () => {
+    const newParams = new URLSearchParams(searchParams.toString());
+    newParams.set("action", "new");
     router.replace(`${pathname}?${newParams.toString()}`, { scroll: false });
   };
 
@@ -188,6 +196,7 @@ export default function ProductsPage() {
           <Button
             variant="contained"
             disableElevation
+            onClick={handleAddProduct}
             sx={{
               backgroundColor: "var(--color-primary)",
               "&:hover": { backgroundColor: "var(--color-primary-dark)" },

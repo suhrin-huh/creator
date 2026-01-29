@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   TextField,
   Select,
@@ -50,10 +50,38 @@ export default function ProductDetailModal() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
-  const productId = searchParams.get("productId");
+  const action = searchParams.get("action"); // "new" | "edit" | null
+  const productId = searchParams.get("productId"); // 편집 모드일 때만 존재
+
+  const isNewMode = action === "new";
+  const isEditMode = action === "edit" && productId;
 
   const [formData, setFormData] = useState<ProductFormData>(initialFormData);
   const [errors, setErrors] = useState<Partial<Record<keyof ProductFormData, string>>>({});
+
+  // action == 'edit'일 경우 기존 데이터 호출
+  useEffect(() => {
+    if (isEditMode && productId) {
+      // TODO: API 호출 - GET /api/products/${productId}
+      // const fetchProduct = async () => {
+      //   const response = await fetch(`/api/products/${productId}`);
+      //   const data = await response.json();
+      //   setFormData({
+      //     ...data,
+      //     receivedDate: data.receivedDate ? dayjs(data.receivedDate) : null,
+      //     uploadDeadline: data.uploadDeadline ? dayjs(data.uploadDeadline) : null,
+      //   });
+      // };
+      // fetchProduct();
+      
+      // 임시: 콘솔에만 출력
+      console.log(`편집 모드: 상품 ID ${productId} 데이터 불러오기`);
+    } else if (isNewMode) {
+      // 새 모드일 때는 폼 초기화
+      setFormData(initialFormData);
+      setErrors({});
+    }
+  }, [isEditMode, isNewMode, productId]);
 
   // 모달 닫기 핸들러
   const handleClose = () => {
@@ -62,6 +90,7 @@ export default function ProductDetailModal() {
     setErrors({})
 
     const params = new URLSearchParams(searchParams.toString());
+    params.delete("action");
     params.delete("productId");
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
@@ -117,18 +146,30 @@ export default function ProductDetailModal() {
     }
 
     // 폼 데이터 처리 (여기서는 콘솔에 출력)
-    console.log("Form Data:", {
+    const submitData = {
       ...formData,
       receivedDate: formData.receivedDate?.format("YYYY-MM-DD") || null,
       uploadDeadline: formData.uploadDeadline?.format("YYYY-MM-DD") || null,
-    });
+    };
 
-    // TODO: API 호출 또는 상태 업데이트
-    alert("저장되었습니다!");
+    if (isNewMode) {
+      // 새 상품 추가 로직
+      console.log("새 상품 추가:", submitData);
+      // TODO: API 호출 - POST /api/v1/products
+      alert("새 상품이 추가되었습니다!");
+    } else if (isEditMode) {
+      // 기존 상품 수정 로직
+      console.log("상품 수정:", { productId, ...submitData });
+      // TODO: API 호출 - PUT /api/v1/products/${productId}
+      alert("상품 정보가 수정되었습니다!");
+    }
+
+    // 모달 닫기
+    handleClose();
   };
 
-  // productId가 없으면 아무것도 렌더링하지 않음
-  if (!productId) return null;
+  // action이 없으면 아무것도 렌더링하지 않음
+  if (!action) return null;
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
@@ -146,7 +187,7 @@ export default function ProductDetailModal() {
             className="flex items-center justify-between py-md"
           >
             <p className="text-h3 font-bold">
-              상품 상세 정보
+              {isNewMode ? "새 상품 추가" : "상품 상세 정보"}
             </p>
             <button type="button" onClick={handleClose}>
               X
