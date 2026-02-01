@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useTransition } from "react";
 import {
   TextField,
   Select,
@@ -13,6 +13,10 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Dayjs } from "dayjs";
 import "dayjs/locale/ko";
+
+// 서버 액션 import
+import { saveSponsorship } from "@/actions/sponsorship";
+
 
 // 폼 데이터 타입 정의
 interface SponsorshipFormData {
@@ -28,6 +32,8 @@ interface SponsorshipFormData {
   contentRetentionMonths: number | "";
   description: string;
   comment: string;
+  // 기존 이미지 URL (수정 모드용)
+  existingImageUrl?: string | null; 
 }
 
 // 초기 폼 데이터
@@ -44,20 +50,31 @@ const initialFormData: SponsorshipFormData = {
   contentRetentionMonths: "", // 컨텐츠 유지 기한
   description: "", // 제품 상세 설명
   comment: "", // 추가 코멘트
+  // 기존 이미지 URL (수정 모드용)
+  existingImageUrl:null
 };
 
 export default function SponsorshipDetailModal() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
+
+  // URL 쿼리 파라미터 처리
   const action = searchParams.get("action"); // "new" | "edit" | null
   const sponsorshipId = searchParams.get("sponsorshipId"); // 편집 모드일 때만 존재
 
   const isNewMode = action === "new";
   const isEditMode = action === "edit" && sponsorshipId;
-
+  
+  // State 관리
   const [formData, setFormData] = useState<SponsorshipFormData>(initialFormData);
+  const [imageFile, setImageFile] = useState<File | null>(null); // 업로드할 파일 객체
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null); // 미리보기 URL
   const [errors, setErrors] = useState<Partial<Record<keyof SponsorshipFormData, string>>>({});
+
+  // useTransition: 서버 액션 실행 중 로딩 상태 관리
+  const [isPending, startTransition] = useTransition();
+
 
   // action == 'edit'일 경우 기존 데이터 호출
   useEffect(() => {
@@ -79,6 +96,8 @@ export default function SponsorshipDetailModal() {
     } else if (isNewMode) {
       // 새 모드일 때는 폼 초기화
       setFormData(initialFormData);
+      setImageFile(null);
+      setPreviewUrl(null);
       setErrors({});
     }
   }, [isEditMode, isNewMode, sponsorshipId]);
@@ -86,8 +105,10 @@ export default function SponsorshipDetailModal() {
   // 모달 닫기 핸들러
   const handleClose = () => {
     // form 초기화
-    setFormData(initialFormData)
-    setErrors({})
+    setFormData(initialFormData);
+    setImageFile(null);
+    setPreviewUrl(null);
+    setErrors({});
 
     const params = new URLSearchParams(searchParams.toString());
     params.delete("action");
@@ -121,52 +142,93 @@ export default function SponsorshipDetailModal() {
     }));
   };
 
-  // 폼 제출 핸들러
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+// ★ 이미지 파일 선택 핸들러
+const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
+  if (file) {
+    setImageFile(file);
+    // 미리보기 URL 생성
+    const objectUrl = URL.createObjectURL(file);
+    setPreviewUrl(objectUrl);
+  }
+};
 
-    // 필수값 검증
-    const newErrors: Partial<Record<keyof SponsorshipFormData, string>> = {};
-    if (!formData.title.trim()) {
-      newErrors.title = "협찬 건 제목을 입력해주세요.";
-    }
-    if (!formData.brand.trim()) {
-      newErrors.brand = "브랜드명을 입력해주세요.";
-    }
-    if (!formData.contentType) {
-      newErrors.contentType = "유형을 선택해주세요.";
-    }
-    if (!formData.status) {
-      newErrors.status = "진행상태를 선택해주세요.";
-    }
+// ★ 폼 제출 핸들러 (서버 액션 호출)
+const handleSubmit = (e: React.FormEvent) => {
+  e.preventDefault();
 
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
+  // console.table(formData);
+
+  // return;
+
+  // 1. 클라이언트 유효성 검사
+  const newErrors: Partial<Record<keyof SponsorshipFormData, string>> = {};
+  // if (!formData.title.trim()) newErrors.title = "제목을 입력해주세요.";
+  // if (!formData.brand.trim()) newErrors.brand = "브랜드명을 입력해주세요.";
+  // if (!formData.contentType) newErrors.contentType = "유형을 선택해주세요.";
+  // // status는 기본값이 있어서 체크 생략 가능하지만 안전하게
+  // if (!formData.status) newErrors.status = "진행상태를 선택해주세요.";
+
+  if (Object.keys(newErrors).length > 0) {
+    setErrors(newErrors);
+    console.log("123")
+    return;
+  }
+
+  // 2. FormData 생성 (서버로 보낼 데이터 포장)
+  const submitFormData = new FormData();
+  
+  // 기본 필드 추가
+  submitFormData.append("actionType", isEditMode ? "edit" : "new");
+  if (sponsorshipId) submitFormData.append("id", sponsorshipId);
+  
+  submitFormData.append("title", formData.title);
+  submitFormData.append("brand", formData.brand);
+  submitFormData.append("contentType", formData.contentType);
+  submitFormData.append("status", formData.status);
+  submitFormData.append("guideLink", formData.guideLink);
+  submitFormData.append("purchaseLink", formData.purchaseLink);
+  submitFormData.append("description", formData.description);
+  submitFormData.append("comment", formData.comment);
+  
+  // 숫자 필드 (빈 값이면 보내지 않거나 빈 문자열로 처리됨 -> 서버에서 처리)
+  submitFormData.append("uploadPeriodDays", String(formData.uploadPeriodDays));
+  submitFormData.append("contentRetentionMonths", String(formData.contentRetentionMonths));
+
+  // 날짜 필드 (Dayjs -> string YYYY-MM-DD 변환)
+  if (formData.receivedDate) {
+    submitFormData.append("receivedDate", formData.receivedDate.format("YYYY-MM-DD"));
+  }
+  if (formData.uploadDeadline) {
+    submitFormData.append("uploadDeadline", formData.uploadDeadline.format("YYYY-MM-DD"));
+  }
+
+  // 이미지 파일 처리
+  if (imageFile) {
+    submitFormData.append("image", imageFile); // 새로 업로드한 파일
+  }
+  // 기존 이미지가 있고 새 파일이 없을 때 유지하기 위해 (필요시)
+  if (formData.existingImageUrl) {
+    submitFormData.append("existingImageUrl", formData.existingImageUrl);
+  }
+
+  // 3. 서버 액션 실행 (Transition 사용)
+  startTransition(async () => {
+    try {
+      const result = await saveSponsorship(null, submitFormData);
+      
+      if (result.success) {
+        alert(result.message);
+        handleClose();
+      } else {
+        alert(result.message); // 실패 메시지
+      }
+    } catch (error) {
+      console.error(error);
+      alert("저장 중 오류가 발생했습니다.");
     }
-
-    // 폼 데이터 처리 (여기서는 콘솔에 출력)
-    const submitData = {
-      ...formData,
-      receivedDate: formData.receivedDate?.format("YYYY-MM-DD") || null,
-      uploadDeadline: formData.uploadDeadline?.format("YYYY-MM-DD") || null,
-    };
-
-    if (isNewMode) {
-      // 새 상품 추가 로직
-      console.log("새 상품 추가:", submitData);
-      // TODO: API 호출 - POST /api/v1/sponsorship
-      alert("새 상품이 추가되었습니다!");
-    } else if (isEditMode) {
-      // 기존 상품 수정 로직
-      console.log("상품 수정:", { sponsorshipId, ...submitData });
-      // TODO: API 호출 - PUT /api/v1/sponsorship/${sponsorshipId}
-      alert("상품 정보가 수정되었습니다!");
-    }
-
-    // 모달 닫기
-    handleClose();
-  };
+  });
+};
 
   // action이 없으면 아무것도 렌더링하지 않음
   if (!action) return null;
@@ -272,6 +334,44 @@ export default function SponsorshipDetailModal() {
                     {errors.receivedDate}
                   </p>
                 )}
+            </div>
+            {/* 업로드 버튼 영역 */}
+            <div className="flex flex-col gap-2">
+              <span className="font-semibold text-sm text-gray-700">대표 이미지</span>
+              <div className="flex items-start gap-4">
+                {/* 미리보기 영역 */}
+                <div className="w-24 h-24 bg-gray-100 rounded-lg border border-gray-200 flex items-center justify-center overflow-hidden shrink-0">
+                  {previewUrl ? (
+                    <img
+                      src={previewUrl}
+                      alt="Preview"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <span className="text-xs text-gray-400">No Image</span>
+                  )}
+                </div>
+
+                {/* 버튼 및 안내 문구 */}
+                <div className="flex flex-col gap-1">
+                  {/* [수정 포인트] 
+                    button -> label로 변경하고 cursor-pointer 클래스 추가 
+                    이렇게 하면 라벨을 클릭했을 때 내부의 input type="file"이 실행됩니다.
+                  */}
+                  <label className="cursor-pointer inline-flex items-center justify-center px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+                    이미지 선택
+                    <input
+                      type="file"
+                      hidden
+                      accept="image/*"
+                      onChange={handleImageChange}
+                    />
+                  </label>
+                  <span className="text-xs text-gray-500 ml-1">
+                    jpg, png, webp (최대 5MB)
+                  </span>
+                </div>
+              </div>
             </div>
             {/* Footer button */}
             <div
