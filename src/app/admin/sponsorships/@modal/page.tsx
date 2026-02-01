@@ -15,7 +15,7 @@ import { Dayjs } from "dayjs";
 import "dayjs/locale/ko";
 
 // 폼 데이터 타입 정의
-interface ProductFormData {
+interface SponsorshipFormData {
   title: string;
   brand: string;
   guideLink: string;
@@ -31,7 +31,7 @@ interface ProductFormData {
 }
 
 // 초기 폼 데이터
-const initialFormData: ProductFormData = {
+const initialFormData: SponsorshipFormData = {
   title: "", // 협찬 건 제목
   brand: "", // 브랜드명
   guideLink: "", // 체험단 안내 글 링크
@@ -46,25 +46,25 @@ const initialFormData: ProductFormData = {
   comment: "", // 추가 코멘트
 };
 
-export default function ProductDetailModal() {
+export default function SponsorshipDetailModal() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
   const action = searchParams.get("action"); // "new" | "edit" | null
-  const productId = searchParams.get("productId"); // 편집 모드일 때만 존재
+  const sponsorshipId = searchParams.get("sponsorshipId"); // 편집 모드일 때만 존재
 
   const isNewMode = action === "new";
-  const isEditMode = action === "edit" && productId;
+  const isEditMode = action === "edit" && sponsorshipId;
 
-  const [formData, setFormData] = useState<ProductFormData>(initialFormData);
-  const [errors, setErrors] = useState<Partial<Record<keyof ProductFormData, string>>>({});
+  const [formData, setFormData] = useState<SponsorshipFormData>(initialFormData);
+  const [errors, setErrors] = useState<Partial<Record<keyof SponsorshipFormData, string>>>({});
 
   // action == 'edit'일 경우 기존 데이터 호출
   useEffect(() => {
-    if (isEditMode && productId) {
-      // TODO: API 호출 - GET /api/products/${productId}
+    if (isEditMode && sponsorshipId) {
+      // TODO: API 호출 - GET /api/v1/sponsorships/${sponsorshipId}
       // const fetchProduct = async () => {
-      //   const response = await fetch(`/api/products/${productId}`);
+      //   const response = await fetch(`/api/v1/sponsorships/${sponsorshipId}`);
       //   const data = await response.json();
       //   setFormData({
       //     ...data,
@@ -75,13 +75,13 @@ export default function ProductDetailModal() {
       // fetchProduct();
       
       // 임시: 콘솔에만 출력
-      console.log(`편집 모드: 상품 ID ${productId} 데이터 불러오기`);
+      console.log(`편집 모드: 상품 ID ${sponsorshipId} 데이터 불러오기`);
     } else if (isNewMode) {
       // 새 모드일 때는 폼 초기화
       setFormData(initialFormData);
       setErrors({});
     }
-  }, [isEditMode, isNewMode, productId]);
+  }, [isEditMode, isNewMode, sponsorshipId]);
 
   // 모달 닫기 핸들러
   const handleClose = () => {
@@ -91,12 +91,12 @@ export default function ProductDetailModal() {
 
     const params = new URLSearchParams(searchParams.toString());
     params.delete("action");
-    params.delete("productId");
+    params.delete("sponsorshipId");
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
   // 필드 변경 핸들러
-  const handleChange = (field: keyof ProductFormData) => (
+  const handleChange = (field: keyof SponsorshipFormData) => (
     e: React.ChangeEvent<HTMLInputElement> | { target: { value: unknown } }
   ) => {
     const value = e.target.value;
@@ -126,7 +126,7 @@ export default function ProductDetailModal() {
     e.preventDefault();
 
     // 필수값 검증
-    const newErrors: Partial<Record<keyof ProductFormData, string>> = {};
+    const newErrors: Partial<Record<keyof SponsorshipFormData, string>> = {};
     if (!formData.title.trim()) {
       newErrors.title = "협찬 건 제목을 입력해주세요.";
     }
@@ -155,12 +155,12 @@ export default function ProductDetailModal() {
     if (isNewMode) {
       // 새 상품 추가 로직
       console.log("새 상품 추가:", submitData);
-      // TODO: API 호출 - POST /api/v1/products
+      // TODO: API 호출 - POST /api/v1/sponsorship
       alert("새 상품이 추가되었습니다!");
     } else if (isEditMode) {
       // 기존 상품 수정 로직
-      console.log("상품 수정:", { productId, ...submitData });
-      // TODO: API 호출 - PUT /api/v1/products/${productId}
+      console.log("상품 수정:", { sponsorshipId, ...submitData });
+      // TODO: API 호출 - PUT /api/v1/sponsorship/${sponsorshipId}
       alert("상품 정보가 수정되었습니다!");
     }
 
@@ -225,7 +225,7 @@ export default function ProductDetailModal() {
                   onChange={(e) => {
                     setFormData((prev) => ({
                       ...prev,
-                      contentType: e.target.value as ProductFormData["contentType"],
+                      contentType: e.target.value as SponsorshipFormData["contentType"],
                     }));
                     if (errors.contentType) {
                       setErrors((prev) => ({

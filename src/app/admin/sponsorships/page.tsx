@@ -6,7 +6,7 @@ import { Button, Chip } from "@mui/material";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 
 // 상품 타입 정의
-interface Product {
+interface Sponsorship {
   id: number;
   title: string;
   productName: string;
@@ -16,9 +16,9 @@ interface Product {
 }
 
 // 목 데이터 생성 (기존 유지)
-const generateMockData = (): Product[] => {
-  const contentTypes: Product["contentType"][] = ["FEED", "REEL", "STORY"];
-  const statuses: Product["status"][] = ["WAITING", "RECEIVED", "COMPLETED"];
+const generateMockData = (): Sponsorship[] => {
+  const contentTypes: Sponsorship["contentType"][] = ["FEED", "REEL", "STORY"];
+  const statuses: Sponsorship["status"][] = ["WAITING", "RECEIVED", "COMPLETED"];
   const productNames = [
     "스킨케어 세트", "에센스", "립스틱", "마스크팩", "선크림",
     "토너", "클렌징폼", "아이크림", "세럼", "로션",
@@ -33,7 +33,7 @@ const generateMockData = (): Product[] => {
     "팩 사용 후기", "오일 마사지 방법", "스크럽 사용 가이드",
   ];
 
-  const mockData: Product[] = [];
+  const mockData: Sponsorship[] = [];
   const today = new Date();
 
   for (let i = 1; i <= 25; i++) {
@@ -58,15 +58,15 @@ const generateMockData = (): Product[] => {
   return mockData;
 };
 
-export default function ProductsPage() {
+export default function SponsorshipPage() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const [products] = useState<Product[]>(generateMockData());
+  const [sponsorships] = useState<Sponsorship[]>(generateMockData());
 
   // 컬럼 정의
-  const columns: GridColDef<Product>[] = [
+  const columns: GridColDef<Sponsorship>[] = [
     {
       field: "title",
       headerName: "협찬 건 제목",
@@ -152,15 +152,15 @@ export default function ProductsPage() {
 
   // 
   // 행 클릭 핸들러: Modal 컨트롤, URL 변경시 @modal/page.tsx가 이를 감지해 자동으로 뜬다
-  const handleRowClick = (params: GridRowParams<Product>) => {
+  const handleRowClick = (params: GridRowParams<Sponsorship>) => {
     const newParams = new URLSearchParams(searchParams.toString());
     newParams.set("action", "edit");
-    newParams.set("productId", params.id.toString());
+    newParams.set("sponsorshipId", params.id.toString());
     router.replace(`${pathname}?${newParams.toString()}`, { scroll: false });
   };
 
   // 상품 추가하기 버튼 클릭 핸들러
-  const handleAddProduct = () => {
+  const handleAddSponsorship = () => {
     const newParams = new URLSearchParams(searchParams.toString());
     newParams.set("action", "new");
     router.replace(`${pathname}?${newParams.toString()}`, { scroll: false });
@@ -187,7 +187,7 @@ export default function ProductsPage() {
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-h3 font-bold text-gray-600 mb-1">
-              상품 리스트
+              협찬 리스트
             </h1>
             <p className="text-body-md">
               현재 진행 중인 협찬 및 광고 상품을 관리하세요.
@@ -196,7 +196,7 @@ export default function ProductsPage() {
           <Button
             variant="contained"
             disableElevation
-            onClick={handleAddProduct}
+            onClick={handleAddSponsorship}
             sx={{
               backgroundColor: "var(--color-primary)",
               "&:hover": { backgroundColor: "var(--color-primary-dark)" },
@@ -214,7 +214,7 @@ export default function ProductsPage() {
         {/*DataGrid*/}
         <div className="flex flex-1 w-full bg-white rounded-lg overflow-hidden shadow-sm border border-gray-200">
           <DataGrid
-            rows={products}
+            rows={sponsorships}
             columns={columns}
             showToolbar
             initialState={{
