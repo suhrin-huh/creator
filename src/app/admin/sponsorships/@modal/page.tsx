@@ -2,76 +2,81 @@
 
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useState, useEffect, useTransition } from "react";
-import {
-  TextField,
-  Select,
-  MenuItem,
-  FormControl,
-} from "@mui/material";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Dayjs } from "dayjs";
 import "dayjs/locale/ko";
 
-// 서버 액션 import
+// 서버 액션
 import { saveSponsorship } from "@/actions/sponsorship";
 
+// component
+import {
+  FormInput,
+  FormSelect,
+  FormDatePicker,
+  FormImageUpload,
+} from "@/components/common/FormInputs";
 
-// 폼 데이터 타입 정의
 interface SponsorshipFormData {
-  title: string;
-  brand: string;
-  guideLink: string;
-  purchaseLink: string;
-  contentType: "FEED" | "REEL" | "STORY" | "";
-  receivedDate: Dayjs | null;
-  uploadPeriodDays: number | "";
-  uploadDeadline: Dayjs | null;
-  status: "WAITING" | "RECEIVED" | "COMPLETED";
-  contentRetentionMonths: number | "";
-  description: string;
-  comment: string;
-  // 기존 이미지 URL (수정 모드용)
-  existingImageUrl?: string | null; 
+  title: string; // 협찬 건 제목
+  brand: string; // 브랜드명
+  guideLink: string; // 체험단 안내 글 링크
+  purchaseLink: string; // 제품 구매 링크
+  contentType: "FEED" | "REEL" | "STORY" | ""; // 제품 홍보 유형
+  receivedDate: Dayjs | null; // 제품 수령일
+  uploadPeriodDays: number | ""; // 제품 홍보 글 업로드 기간
+  uploadDeadline: Dayjs | null; // 업로드 마감일
+  status: "WAITING" | "RECEIVED" | "COMPLETED"; // 진행상태
+  contentRetentionMonths: number | ""; // 컨텐츠 유지 기한
+  description: string; // 제품 상세 설명
+  comment: string; // 추가 코멘트
+  existingImageUrl?: string | null; // 기존 이미지 URL(edit용)
 }
 
-// 초기 폼 데이터
 const initialFormData: SponsorshipFormData = {
-  title: "", // 협찬 건 제목
-  brand: "", // 브랜드명
-  guideLink: "", // 체험단 안내 글 링크
-  purchaseLink: "", // 제품 구매 링크
-  contentType: "", // 제품 홍보 유형
-  receivedDate: null, // 제품 수령일
-  uploadPeriodDays: "", // 제품 홍보 글 업로드 기간
-  uploadDeadline: null, // 업로드 마감일
-  status: "WAITING", // 진행상태
-  contentRetentionMonths: "", // 컨텐츠 유지 기한
-  description: "", // 제품 상세 설명
-  comment: "", // 추가 코멘트
-  // 기존 이미지 URL (수정 모드용)
-  existingImageUrl:null
+  title: "",
+  brand: "",
+  guideLink: "",
+  purchaseLink: "",
+  contentType: "",
+  receivedDate: null,
+  uploadPeriodDays: "",
+  uploadDeadline: null,
+  status: "WAITING",
+  contentRetentionMonths: "",
+  description: "",
+  comment: "",
+  existingImageUrl: null,
 };
+
+// [옵션 데이터 정의] Select box용
+const CONTENT_TYPE_OPTIONS = [
+  { label: "피드", value: "FEED" },
+  { label: "릴스", value: "REEL" },
+  { label: "스토리", value: "STORY" },
+];
+
+const STATUS_OPTIONS = [
+  { label: "대기중", value: "WAITING" },
+  { label: "수령완료", value: "RECEIVED" },
+  { label: "완료됨", value: "COMPLETED" },
+];
 
 export default function SponsorshipDetailModal() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
 
-  // URL 쿼리 파라미터 처리
-  const action = searchParams.get("action"); // "new" | "edit" | null
-  const sponsorshipId = searchParams.get("sponsorshipId"); // 편집 모드일 때만 존재
-
+  const action = searchParams.get("action");
+  const sponsorshipId = searchParams.get("sponsorshipId");
   const isNewMode = action === "new";
   const isEditMode = action === "edit" && sponsorshipId;
-  
+
   // State 관리
   const [formData, setFormData] = useState<SponsorshipFormData>(initialFormData);
   const [imageFile, setImageFile] = useState<File | null>(null); // 업로드할 파일 객체
   const [previewUrl, setPreviewUrl] = useState<string | null>(null); // 미리보기 URL
   const [errors, setErrors] = useState<Partial<Record<keyof SponsorshipFormData, string>>>({});
-
+  
   // useTransition: 서버 액션 실행 중 로딩 상태 관리
   const [isPending, startTransition] = useTransition();
 
@@ -142,58 +147,50 @@ export default function SponsorshipDetailModal() {
     }));
   };
 
-// ★ 이미지 파일 선택 핸들러
-const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  const file = e.target.files?.[0];
-  if (file) {
-    setImageFile(file);
+// 이미지 파일 선택 핸들러
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImageFile(file);
     // 미리보기 URL 생성
     const objectUrl = URL.createObjectURL(file);
     setPreviewUrl(objectUrl);
-  }
-};
+    }
+  };
 
-// ★ 폼 제출 핸들러 (서버 액션 호출)
-const handleSubmit = (e: React.FormEvent) => {
-  e.preventDefault();
+// 폼 제출 핸들러 (서버 액션 호출)
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
 
-  // console.table(formData);
 
-  // return;
+    // 클라이언트 유효성 검사
+     const newErrors: Partial<Record<keyof SponsorshipFormData, string>> = {};
+     if (!formData.title.trim()) newErrors.title = "제목을 입력해주세요.";
+     if (!formData.brand.trim()) newErrors.brand = "브랜드명을 입력해주세요.";
+     if (!formData.contentType) newErrors.contentType = "유형을 선택해주세요.";
+     if (!formData.status) newErrors.status = "진행상태를 선택해주세요.";
 
-  // 1. 클라이언트 유효성 검사
-  const newErrors: Partial<Record<keyof SponsorshipFormData, string>> = {};
-  // if (!formData.title.trim()) newErrors.title = "제목을 입력해주세요.";
-  // if (!formData.brand.trim()) newErrors.brand = "브랜드명을 입력해주세요.";
-  // if (!formData.contentType) newErrors.contentType = "유형을 선택해주세요.";
-  // // status는 기본값이 있어서 체크 생략 가능하지만 안전하게
-  // if (!formData.status) newErrors.status = "진행상태를 선택해주세요.";
+     if (Object.keys(newErrors).length > 0) {
+       setErrors(newErrors);
+       return;
+     }
 
-  if (Object.keys(newErrors).length > 0) {
-    setErrors(newErrors);
-    console.log("123")
-    return;
-  }
-
-  // 2. FormData 생성 (서버로 보낼 데이터 포장)
-  const submitFormData = new FormData();
-  
-  // 기본 필드 추가
-  submitFormData.append("actionType", isEditMode ? "edit" : "new");
-  if (sponsorshipId) submitFormData.append("id", sponsorshipId);
-  
-  submitFormData.append("title", formData.title);
-  submitFormData.append("brand", formData.brand);
-  submitFormData.append("contentType", formData.contentType);
-  submitFormData.append("status", formData.status);
-  submitFormData.append("guideLink", formData.guideLink);
-  submitFormData.append("purchaseLink", formData.purchaseLink);
-  submitFormData.append("description", formData.description);
-  submitFormData.append("comment", formData.comment);
+    // FormData 생성 (서버로 보낼 데이터 포장)
+     const submitFormData = new FormData();
+     submitFormData.append("actionType", isEditMode ? "edit" : "new");
+     if (sponsorshipId) submitFormData.append("id", sponsorshipId);
+     submitFormData.append("title", formData.title);
+     submitFormData.append("brand", formData.brand);
+     submitFormData.append("contentType", formData.contentType);
+     submitFormData.append("status", formData.status);
+     submitFormData.append("guideLink", formData.guideLink);
+     submitFormData.append("purchaseLink", formData.purchaseLink);
+     submitFormData.append("description", formData.description);
+     submitFormData.append("comment", formData.comment);
   
   // 숫자 필드 (빈 값이면 보내지 않거나 빈 문자열로 처리됨 -> 서버에서 처리)
-  submitFormData.append("uploadPeriodDays", String(formData.uploadPeriodDays));
-  submitFormData.append("contentRetentionMonths", String(formData.contentRetentionMonths));
+     submitFormData.append("uploadPeriodDays", String(formData.uploadPeriodDays));
+     submitFormData.append("contentRetentionMonths", String(formData.contentRetentionMonths));
 
   // 날짜 필드 (Dayjs -> string YYYY-MM-DD 변환)
   if (formData.receivedDate) {
@@ -213,180 +210,171 @@ const handleSubmit = (e: React.FormEvent) => {
   }
 
   // 3. 서버 액션 실행 (Transition 사용)
-  startTransition(async () => {
-    try {
-      const result = await saveSponsorship(null, submitFormData);
+    startTransition(async () => {
+      try {
+        const result = await saveSponsorship(null, submitFormData);
       
-      if (result.success) {
-        alert(result.message);
-        handleClose();
-      } else {
+        if (result.success) {
+          alert(result.message);
+          handleClose();
+        } else {
         alert(result.message); // 실패 메시지
-      }
-    } catch (error) {
-      console.error(error);
+        }
+      } catch (error) {
+        console.error(error);
       alert("저장 중 오류가 발생했습니다.");
-    }
-  });
-};
+      }
+    });
+  };
 
   // action이 없으면 아무것도 렌더링하지 않음
   if (!action) return null;
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
       <div
-        className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs"
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
         onClick={handleClose}
       >
         <form
           onSubmit={handleSubmit}
           onClick={(e) => e.stopPropagation()}
-          className="min-h-0 shrink-0 relative w-4/5 max-w-[900px] max-h-4/5 bg-white rounded-lg shadow-lg flex flex-col overflow-scroll hide-scrollbar p-lg"
+          className="relative w-[90%] min-w-[600px] min-h-[600px] max-h-[85vh] bg-white rounded-xl shadow-2xl flex flex-col overflow-hidden"
         >
-          {/* Form Header */}
-          <div
-            className="flex items-center justify-between py-md"
-          >
-            <p className="text-h3 font-bold">
+          {/* Header */}
+          <div className="flex items-center justify-between px-6 py-4 border-b bg-gray-50 shrink-0">
+            <h2 className="text-xl font-bold text-gray-800">
               {isNewMode ? "새 상품 추가" : "상품 상세 정보"}
-            </p>
-            <button type="button" onClick={handleClose}>
-              X
+            </h2>
+            <button
+              type="button"
+              onClick={handleClose}
+              className="text-gray-400 hover:text-gray-600 text-2xl font-bold"
+            >
+              &times;
             </button>
           </div>
-          {/* 메인 form */}
-          <div className="flex flex-col gap-y-md overflow-scroll hide-scrollbar">
-            {/* (1) text */}
-            <div className="flex flex-col gap-y-sm">
-              <p className="font-semibold text-body-md">
-                협찬 건 제목 <span className="text-danger">*</span>
-              </p>
-              <TextField
-                fullWidth
+          <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-6">
+            {/* 이미지 업로드 */}
+            <FormImageUpload
+              label="대표 이미지"
+              previewUrl={previewUrl}
+              onChange={handleImageChange}
+            />
+
+            {/* 기본 정보 */}
+            <div className="flex flex-col gap-4">
+              <FormInput
+                label="협찬 건 제목"
+                required
                 value={formData.title}
                 onChange={handleChange("title")}
-                error={!!errors.title}
-                placeholder="협찬 건 제목을 입력하세요"
-                size="small"
+                errorMessage={errors.title}
+                placeholder="제목을 입력하세요"
               />
-              {errors.title && (
-                <p className="text-caption font-semibold text-danger">
-                  {errors.contentType}
-                </p>
-              )}
+              <FormInput
+                label="브랜드명"
+                required
+                value={formData.brand}
+                onChange={handleChange("brand")}
+                errorMessage={errors.brand}
+                placeholder="브랜드명을 입력하세요"
+              />
             </div>
-            {/* (2) select */}
-            <div className="flex min-w-[250px] flex-col gap-y-sm">
-              <p className="text-body-md font-semibold">
-                유형 <span className="text-danger">*</span>
-              </p>
-              <FormControl fullWidth size="small" error={!!errors.contentType}>
-                <Select
-                  value={formData.contentType}
-                  onChange={(e) => {
-                    setFormData((prev) => ({
-                      ...prev,
-                      contentType: e.target.value as SponsorshipFormData["contentType"],
-                    }));
-                    if (errors.contentType) {
-                      setErrors((prev) => ({
-                        ...prev,
-                        contentType: undefined,
-                      }));
-                    }
-                  }}
-                  displayEmpty
-                >
-                  <MenuItem value="" disabled>
-                    None
-                  </MenuItem>
-                  <MenuItem value="FEED">피드</MenuItem>
-                  <MenuItem value="REEL">릴스</MenuItem>
-                  <MenuItem value="STORY">스토리</MenuItem>
-                </Select>
-                {errors.contentType && (
-                  <p className="text-caption font-semibold text-danger">
-                    {errors.contentType}
-                  </p>
-                )}
-              </FormControl>
-            </div>
-            {/* (3) date picker */}
-            <div className="flex min-w-[250px] flex-col gap-y-sm">
-              <p className="text-body-md font-semibold">
-                제품 수령일 <span className="text-danger">*</span>
-              </p>
-              <DatePicker
+            <div className="grid grid-cols-3 gap-4">
+              <FormSelect
+                label="유형"
+                required
+                value={formData.contentType}
+                onChange={(e) => handleChange("contentType")(e as any)}
+                options={CONTENT_TYPE_OPTIONS}
+                errorMessage={errors.contentType}
+              />
+              <FormSelect
+                label="진행 상태"
+                required
+                value={formData.status}
+                onChange={(e) => handleChange("status")(e as any)}
+                options={STATUS_OPTIONS}
+                errorMessage={errors.status}
+              />
+                            <FormInput
+                label="컨텐츠 유지 기간 (개월)"
+                type="number"
+                value={formData.contentRetentionMonths}
+                onChange={handleChange("contentRetentionMonths")}
+                placeholder="예: 6"
+              />
+              <FormDatePicker
+                label="제품 수령일"
                 value={formData.receivedDate}
                 onChange={handleDateChange("receivedDate")}
-                format="YYYY-MM-DD"
-                slotProps={{
-                  textField: {
-                    fullWidth: true,
-                    size: "small",
-                    placeholder: "yyyy-mm-dd",
-                  },
-                }}
+                errorMessage={errors.receivedDate}
               />
-                {errors.receivedDate && (
-                  <p className="text-caption font-semibold text-danger">
-                    {errors.receivedDate}
-                  </p>
-                )}
-            </div>
-            {/* 업로드 버튼 영역 */}
-            <div className="flex flex-col gap-2">
-              <span className="font-semibold text-sm text-gray-700">대표 이미지</span>
-              <div className="flex items-start gap-4">
-                {/* 미리보기 영역 */}
-                <div className="w-24 h-24 bg-gray-100 rounded-lg border border-gray-200 flex items-center justify-center overflow-hidden shrink-0">
-                  {previewUrl ? (
-                    <img
-                      src={previewUrl}
-                      alt="Preview"
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <span className="text-xs text-gray-400">No Image</span>
-                  )}
-                </div>
+              <FormInput
+                label="업로드 기한 (일수)"
+                type="number"
+                value={formData.uploadPeriodDays}
+                onChange={handleChange("uploadPeriodDays")}
+                placeholder="예: 7"
+              />
+              <FormDatePicker
+                label="업로드 마감일"
+                value={formData.uploadDeadline}
+                onChange={handleDateChange("uploadDeadline")}
+              />
 
-                {/* 버튼 및 안내 문구 */}
-                <div className="flex flex-col gap-1">
-                  {/* [수정 포인트] 
-                    button -> label로 변경하고 cursor-pointer 클래스 추가 
-                    이렇게 하면 라벨을 클릭했을 때 내부의 input type="file"이 실행됩니다.
-                  */}
-                  <label className="cursor-pointer inline-flex items-center justify-center px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
-                    이미지 선택
-                    <input
-                      type="file"
-                      hidden
-                      accept="image/*"
-                      onChange={handleImageChange}
-                    />
-                  </label>
-                  <span className="text-xs text-gray-500 ml-1">
-                    jpg, png, webp (최대 5MB)
-                  </span>
-                </div>
-              </div>
             </div>
-            {/* Footer button */}
-            <div
-              className="flex justify-end gap-md p-md"
-              >
-              <button type="button" onClick={handleClose}>
-                취소
-              </button>
-              <button type="submit">
-                저장
-              </button>
+
+            {/* 링크 및 상세 정보 */}
+            <div className="flex flex-col gap-4">
+              <FormInput
+                label="가이드 링크"
+                value={formData.guideLink}
+                onChange={handleChange("guideLink")}
+              />
+              <FormInput
+                label="구매 링크"
+                value={formData.purchaseLink}
+                onChange={handleChange("purchaseLink")}
+              />
+              <FormInput
+                label="제품 설명"
+                multiline
+                rows={3}
+                value={formData.description}
+                onChange={handleChange("description")}
+                placeholder="기억해야 할 사항을 적어주세요."
+              />
+              <FormInput
+                label="메모 / 코멘트"
+                multiline
+                rows={3}
+                value={formData.comment}
+                onChange={handleChange("comment")}
+                placeholder="기억해야 할 사항을 적어주세요."
+              />
             </div>
+          </div>
+
+          {/* Footer */}
+          <div className="p-4 border-t bg-gray-50 flex justify-end gap-3 shrink-0">
+            <button
+              type="button"
+              onClick={handleClose}
+              disabled={isPending}
+              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+            >
+              취소
+            </button>
+            <button
+              type="submit"
+              disabled={isPending}
+              className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-700 disabled:bg-indigo-400 transition-colors"
+            >
+              {isPending ? "저장 중..." : "저장하기"}
+            </button>
           </div>
         </form>
       </div>
-    </LocalizationProvider>
   );
 }
