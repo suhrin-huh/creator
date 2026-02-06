@@ -34,8 +34,9 @@ export async function saveSponsorship(
 
   // 2. 이미지 업로드 처리
   const imageFile = formData.get('image') as File;
-  let imageUrl = formData.get('existingImageUrl') as string | null; // 기존 이미지 유지
+  let imageUrl = formData.get('imageUrl') as string | null; // 기존 이미지 유지
 
+  // 이미지가 입력되어 있는 경우 storage에 저장하여 public url 전달하기
   if (imageFile && imageFile.size > 0) {
     const fileExt = imageFile.name.split('.').pop();
     const fileName = `${Date.now()}_${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
@@ -62,8 +63,8 @@ export async function saveSponsorship(
     image_url: imageUrl,
     content_type: contentType,
     status: status,
-    guide_url: formData.get('guideLink') as string,
-    purchase_url: formData.get('purchaseLink') as string,
+    guide_url: formData.get('guideUrl') as string,
+    purchase_url: formData.get('purchaseUrl') as string,
     received_date: receivedDate,
     upload_deadline: uploadDeadline,
     deadline_days: deadlineDays,

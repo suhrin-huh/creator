@@ -19,8 +19,8 @@ import {
 interface SponsorshipFormData {
   title: string; // 협찬 건 제목
   brand: string; // 브랜드명
-  guideLink: string; // 체험단 안내 글 링크
-  purchaseLink: string; // 제품 구매 링크
+  guideUrl: string; // 체험단 안내 글 링크
+  purchaseUrl: string; // 제품 구매 링크
   contentType: "FEED" | "REEL" | "STORY" | ""; // 제품 홍보 유형
   receivedDate: Dayjs | null; // 제품 수령일
   uploadPeriodDays: number | ""; // 제품 홍보 글 업로드 기간
@@ -29,14 +29,14 @@ interface SponsorshipFormData {
   contentRetentionMonths: number | ""; // 컨텐츠 유지 기한
   description: string; // 제품 상세 설명
   comment: string; // 추가 코멘트
-  existingImageUrl?: string | null; // 기존 이미지 URL(edit용)
+  imageUrl?: string | null; // 기존 이미지 URL(edit용)
 }
 
 const initialFormData: SponsorshipFormData = {
   title: "",
   brand: "",
-  guideLink: "",
-  purchaseLink: "",
+  guideUrl: "",
+  purchaseUrl: "",
   contentType: "",
   receivedDate: null,
   uploadPeriodDays: "",
@@ -45,7 +45,7 @@ const initialFormData: SponsorshipFormData = {
   contentRetentionMonths: "",
   description: "",
   comment: "",
-  existingImageUrl: null,
+  imageUrl: null,
 };
 
 // [옵션 데이터 정의] Select box용
@@ -214,8 +214,8 @@ export default function SponsorshipDetailModal() {
      submitFormData.append("brand", formData.brand);
      submitFormData.append("contentType", formData.contentType);
      submitFormData.append("status", formData.status);
-     submitFormData.append("guideLink", formData.guideLink);
-     submitFormData.append("purchaseLink", formData.purchaseLink);
+     submitFormData.append("guideUrl", formData.guideUrl);
+     submitFormData.append("purchaseUrl", formData.purchaseUrl);
      submitFormData.append("description", formData.description);
      submitFormData.append("comment", formData.comment);
   
@@ -236,8 +236,8 @@ export default function SponsorshipDetailModal() {
     submitFormData.append("image", imageFile); // 새로 업로드한 파일
   }
   // 기존 이미지가 있고 새 파일이 없을 때 유지하기 위해 (필요시)
-  if (formData.existingImageUrl) {
-    submitFormData.append("existingImageUrl", formData.existingImageUrl);
+  if (formData.imageUrl) {
+    submitFormData.append("imageUrl", formData.imageUrl);
   }
 
   // 3. 서버 액션 실행 (Transition 사용)
@@ -360,13 +360,13 @@ export default function SponsorshipDetailModal() {
             <div className="flex flex-col gap-4">
               <FormInput
                 label="가이드 링크"
-                value={formData.guideLink}
-                onChange={handleChange("guideLink")}
+                value={formData.guideUrl}
+                onChange={handleChange("guideUrl")}
               />
               <FormInput
                 label="구매 링크"
-                value={formData.purchaseLink}
-                onChange={handleChange("purchaseLink")}
+                value={formData.purchaseUrl}
+                onChange={handleChange("purchaseUrl")}
               />
               <FormInput
                 label="제품 설명"
