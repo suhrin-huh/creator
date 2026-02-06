@@ -58,7 +58,7 @@ const CONTENT_TYPE_OPTIONS = [
 const STATUS_OPTIONS = [
   { label: "대기중", value: "WAITING" },
   { label: "수령완료", value: "RECEIVED" },
-  { label: "완료됨", value: "COMPLETED" },
+  { label: "업로드완료", value: "COMPLETED" },
 ];
 
 export default function SponsorshipDetailModal() {
@@ -79,7 +79,6 @@ export default function SponsorshipDetailModal() {
   
   // useTransition: 서버 액션 실행 중 로딩 상태 관리
   const [isPending, startTransition] = useTransition();
-
 
   // action == 'edit'일 경우 기존 데이터 호출
   useEffect(() => {
@@ -122,14 +121,32 @@ export default function SponsorshipDetailModal() {
   };
 
   // 필드 변경 핸들러
+  // 추가 로직 => 제품 수령일, 업로드 기한, 업로드 마감일 연결되어 변경
   const handleChange = (field: keyof SponsorshipFormData) => (
     e: React.ChangeEvent<HTMLInputElement> | { target: { value: unknown } }
   ) => {
     const value = e.target.value;
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
+    
+    setFormData((prev) => {
+
+      // 변경 적용한 새로운 상태 객체 생성
+      const nextState = {
+        ...prev,
+        [field]: value,
+      };
+
+      // 자동 계산 로직
+      if (field === 'uploadPeriodDays') {
+        const {receivedDate, uploadPeriodDays} = nextState
+        
+        if (receivedDate && uploadPeriodDays !== '') {
+          nextState.uploadDeadline = receivedDate.add(Number(uploadPeriodDays), 'day');
+        }
+      }
+
+      return nextState;
+    });
+    
     // 에러 초기화
     if (errors[field]) {
       setErrors((prev) => ({
@@ -141,10 +158,24 @@ export default function SponsorshipDetailModal() {
 
   // 날짜 변경 핸들러
   const handleDateChange = (field: "receivedDate" | "uploadDeadline") => (date: Dayjs | null) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: date,
-    }));
+    setFormData((prev) => {
+      // 변경 적용한 새로운 상태 객체 생성
+      const nextState = {
+        ...prev,
+        [field]: date,
+      };
+
+      // 자동 계산 로직
+      if (field === 'receivedDate') {
+        const {receivedDate, uploadPeriodDays} = nextState
+        
+        if (receivedDate && uploadPeriodDays !== '') {
+          nextState.uploadDeadline = receivedDate.add(Number(uploadPeriodDays), 'day');
+        }
+      }
+
+      return nextState;
+    });
   };
 
 // 이미지 파일 선택 핸들러
