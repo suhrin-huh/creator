@@ -76,7 +76,8 @@ export default function SponsorshipDetailModal() {
   const [imageFile, setImageFile] = useState<File | null>(null); // 업로드할 파일 객체
   const [previewUrl, setPreviewUrl] = useState<string | null>(null); // 미리보기 URL
   const [errors, setErrors] = useState<Partial<Record<keyof SponsorshipFormData, string>>>({});
-  
+  const [fileSize, setFileSize] = useState<number | null>(null); // 파일 용량 상태
+
   // useTransition: 서버 액션 실행 중 로딩 상태 관리
   const [isPending, startTransition] = useTransition();
 
@@ -178,18 +179,29 @@ export default function SponsorshipDetailModal() {
     });
   };
 
-// 이미지 파일 선택 핸들러
+  // 이미지 파일 선택 핸들러
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       setImageFile(file);
-    // 미리보기 URL 생성
-    const objectUrl = URL.createObjectURL(file);
+      setFileSize(file.size); // 파일 용량 저장
+    
+    const objectUrl = URL.createObjectURL(file); // 미리보기 URL 생성
     setPreviewUrl(objectUrl);
     }
   };
 
-// 폼 제출 핸들러 (서버 액션 호출)
+  // 이미지 초기화(삭제) 핸들러
+  const handleImageRemove = () => {
+    setImageFile(null);       // 업로드 파일 객체 제거
+    setPreviewUrl(null);      // 미리보기 제거
+    setFileSize(null);        // 용량 정보 제거
+    
+    // DB에 저장된 기존 이미지 URL도 제거 (null로 설정하여 서버에 전달)
+    setFormData((prev) => ({ ...prev, imageUrl: null }));
+  };
+
+  // 폼 제출 핸들러 (서버 액션 호출)
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -289,7 +301,9 @@ export default function SponsorshipDetailModal() {
             <FormImageUpload
               label="대표 이미지"
               previewUrl={previewUrl}
+              fileSize={fileSize}
               onChange={handleImageChange}
+              onRemove={handleImageRemove}
             />
 
             {/* 기본 정보 */}

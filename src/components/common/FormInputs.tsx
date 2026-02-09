@@ -139,19 +139,32 @@ export const FormDatePicker = ({
 
 // =========================================================
 // 4. 이미지 업로드 (FormImageUpload)
+// 파일 용량 포맷팅 추가
 // =========================================================
 interface FormImageUploadProps {
   label: string;
   previewUrl: string | null;
+  fileSize?: number | null;     // 파일 용량
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onRemove: () => void;         // 초기화 핸들러
   errorMessage?: string;
   required?: boolean;
 }
 
+const formatFileSize = (bytes: number) => {
+  if (bytes === 0) return "0 Bytes";
+  const k = 1024;
+  const sizes = ["Bytes", "KB", "MB", "GB"];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+};
+
 export const FormImageUpload = ({
   label,
   previewUrl,
+  fileSize,
   onChange,
+  onRemove,
   errorMessage,
   required,
 }: FormImageUploadProps) => {
@@ -172,20 +185,45 @@ export const FormImageUpload = ({
           )}
         </div>
 
-        {/* 버튼 영역 */}
-        <div className="flex flex-col gap-1">
-          <label className="cursor-pointer inline-flex items-center justify-center px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
-            이미지 선택
-            <input
-              type="file"
-              hidden
-              accept="image/*"
-              onChange={onChange}
-            />
-          </label>
-          <span className="text-xs text-gray-500 ml-1">
-            jpg, png, webp (최대 5MB)
-          </span>
+        {/* 2. 컨트롤 영역 (버튼 및 정보) */}
+        <div className="flex flex-col gap-2 justify-center h-24">
+          {previewUrl ? (
+            // [상태 A] 이미지가 있을 때: 초기화 버튼 + 용량
+            <div className="flex flex-col gap-1">
+              <button
+                type="button"
+                onClick={onRemove}
+                className="px-4 py-2 text-sm font-medium text-red-600 bg-white border border-red-200 rounded-md hover:bg-red-50 transition-colors focus:outline-none"
+              >
+                이미지 초기화
+              </button>
+              
+              {/* 용량 표시 (값이 있을 때만) */}
+              {fileSize && (
+                <span className="text-xs text-gray-500 font-medium ml-1">
+                  용량: {formatFileSize(fileSize)}
+                </span>
+              )}
+            </div>
+          ) : (
+            // [상태 B] 이미지가 없을 때: 업로드 버튼 + 안내 문구
+            <div className="flex flex-col gap-1">
+              <label className="cursor-pointer inline-flex items-center justify-center px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+                이미지 선택
+                <input
+                  type="file"
+                  hidden
+                  accept="image/*"
+                  onChange={onChange}
+                  // 중요: 같은 파일 다시 선택 시 onChange 발동되게 초기화
+                  onClick={(e) => (e.currentTarget.value = '')}
+                />
+              </label>
+              <span className="text-xs text-gray-500 ml-1">
+                jpg, png, webp (최대 5MB)
+              </span>
+            </div>
+          )}
         </div>
       </div>
       <ErrorMessage>{errorMessage}</ErrorMessage>
