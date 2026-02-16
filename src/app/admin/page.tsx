@@ -98,7 +98,7 @@ export default function AdminPage() {
           <div className="grid h-48 grid-cols-2 gap-4">
             {/* Button 1: Product Management (Active) */}
             <button
-              onClick={() => router.push("/admin/products")}
+              onClick={() => router.push("/admin/sponsorships")}
               className="group hover:border-primary flex flex-col items-center justify-center rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md active:scale-95"
             >
               {/* Icon: Accent Color로 포인트 */}
@@ -107,7 +107,7 @@ export default function AdminPage() {
               </span>
               {/* Text: 평소엔 Gray-700, Hover시 Primary-dark */}
               <span className="group-hover:text-primary-dark font-bold text-gray-700 transition-colors">
-                상품 관리
+                협찬 관리
               </span>
             </button>
 
