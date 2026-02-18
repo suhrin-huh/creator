@@ -1,5 +1,13 @@
 import { Dayjs } from "dayjs";
 
+/** TODO: 업로드 완료 건의 경우 아래의 항목이 모두 작성되었다는 전제 */
+export interface PublicSponsorship {
+  id: number;
+  title: string;
+  imageUrl: string;
+  description: string;
+  purchaseUrl: string;
+}
 export interface SponsorshipFormData {
   title: string; // 협찬 건 제목
   brandName: string; // 브랜드명
