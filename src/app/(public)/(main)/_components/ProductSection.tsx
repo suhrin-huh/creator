@@ -1,7 +1,7 @@
 "use client";
 
 // library
-import { ChangeEvent, useState, useEffect } from "react";
+import { ChangeEvent, useState, useEffect, useTransition, useMemo } from "react";
 
 // hooks
 import useDebounce from "@/hooks/useDebounce";
@@ -10,37 +10,38 @@ import useDebounce from "@/hooks/useDebounce";
 import SearchInput from "./SearchInput";
 import ProductList from "./ProductList";
 
-const PRODUCT_LIST = [
-  {
-    id: 0,
-    title: "지가드 도난방지 롱스트랩",
-    description:
-      "견고한 강화 후크로 여행 중 소매치기와 분실 위험을 방지하고, 최대 160cm까지 길이를 조절할 수 있어 나만의 맞춤형 스타일로 편안하게 활용이 가능합니다.",
-    image: "/gitis-ggardstrap.jpg",
-    link: "https://smartstore.naver.com/gtcare/products/12707065051",
-  },
-  {
-    id: 1,
-    title: "샵한현재 소프트 벨벳 립 앤 치크",
-    description:
-      "립·치크·아이까지, 하나로 완성되는 멀티 톤온톤 컬러, 프라이머 기능이 더해진 블러 스머징으로 은은함부터 선명함까지 무너짐없는 컬러픽싱이 가능합니다.",
-    image: "/hanhynjae-lipandcheek.jpg",
-    link: "https://smartstore.naver.com/hhjbeauty/products/12913591680",
-  },
-];
+// actions
+import { getPublicSponsorships } from "@/actions/sponsorship";
 
-export type Product = (typeof PRODUCT_LIST)[number];
+// types
+import { PublicSponsorship } from "@/types";
 
 const DEBOUNCE_DELAY = 200;
 
 export default function ProductSection() {
   const [keyword, setKeyword] = useState("");
   const debouncedKeyword = useDebounce(keyword, DEBOUNCE_DELAY);
-  const [productList, setProductList] = useState(PRODUCT_LIST);
+
+  // 파생 상태로 리스트 관리
+  const [allProducts, setAllProducts] = useState<PublicSponsorship[]>([]);
+  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
-    setProductList(PRODUCT_LIST.filter((product) => product.title.includes(debouncedKeyword)));
-  }, [debouncedKeyword]);
+    // TODO: startTransition을 사용 => UI 블로킹 없이 부드럽게 상태 업데이트 가능
+    startTransition(async () => {
+      const data = await getPublicSponsorships();
+      setAllProducts(data);
+    });
+  }, []);
+
+  // 원본과 검색어 이용해 재렌더링시마다 계산
+  const filteredList = useMemo(() => {
+    if (!debouncedKeyword) return allProducts; // 검색어 없으면 전체 보여줌
+
+    return allProducts.filter((product) =>
+      product.title.toLowerCase().includes(debouncedKeyword.toLowerCase()),
+    );
+  }, [allProducts, debouncedKeyword]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setKeyword(e.target.value);
@@ -53,7 +54,8 @@ export default function ProductSection() {
   return (
     <section className="gap-y-lg flex flex-col items-center">
       <SearchInput value={keyword} onChange={handleChange} onClick={handleClear} />
-      <ProductList productList={productList} />
+      {/* TODO: 로딩 중 UI 추가 */}
+      <ProductList productList={filteredList} />
     </section>
   );
 }

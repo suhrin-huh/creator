@@ -28,7 +28,7 @@ export default function ProductCard({ image, title, description, link }: Product
         />
       </div>
 
-      {/* 제품 정보 */}
+      {/* 제품 정보 TODO: 제품 정보에 따른 크기 변동으로 인해 스타일 오류(line-clamp-2)*/}
       <div className="flex-1 p-4">
         <h3 className="mb-2 text-lg font-bold text-gray-800">{title}</h3>
         <p className="line-clamp-2 text-sm leading-relaxed text-gray-600">{description}</p>

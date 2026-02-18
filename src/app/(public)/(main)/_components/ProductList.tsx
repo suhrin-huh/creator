@@ -4,10 +4,10 @@
 import ProductCard from "./ProductCard";
 
 // types
-import { Product } from "./ProductSection";
+import { PublicSponsorship } from "@/types";
 
 interface ProductListProps {
-  productList: Product[];
+  productList: PublicSponsorship[];
 }
 
 export default function ProductList({ productList }: ProductListProps) {
@@ -17,9 +17,9 @@ export default function ProductList({ productList }: ProductListProps) {
         <ProductCard
           key={`product-card-${product.id}`}
           title={product.title}
-          image={product.image}
+          image={product.imageUrl}
           description={product.description}
-          link={product.link}
+          link={product.purchaseUrl}
         />
       ))}
     </div>
