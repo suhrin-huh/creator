@@ -132,6 +132,7 @@ export function useSponsorshipForm({
         const result = await saveSponsorship(null, submitFormData);
         if (result.success) {
           alert(result.message);
+          setFormData(INITIAL_FORM_DATA)
           onSuccess(); // 성공 시 모달 닫기 등의 동작 수행
         } else {
           alert(result.message);
