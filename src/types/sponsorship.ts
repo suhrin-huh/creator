@@ -8,6 +8,7 @@ export interface PublicSponsorship {
   description: string;
   purchaseUrl: string;
 }
+
 export interface SponsorshipFormData {
   title: string; // 협찬 건 제목
   brandName: string; // 브랜드명
@@ -20,6 +21,8 @@ export interface SponsorshipFormData {
   deadlineDays: number | ""; // 제품 홍보 글 업로드 기간
   uploadDeadline: Dayjs | null; // 업로드 마감일
   retentionMonths: number | ""; // 컨텐츠 유지 기한
+  uploadedDate: Dayjs | null; // 실제 업로드 날짜
+  isPublic: boolean; // 공개 여부
   status: "WAITING" | "RECEIVED" | "COMPLETED"; // 진행상태
   memo: string; // 추가 코멘트
 }

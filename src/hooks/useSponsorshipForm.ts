@@ -46,8 +46,13 @@ export function useSponsorshipForm({
   // 텍스트/Select 변경 핸들러
   const handleChange =
     (field: keyof SponsorshipFormData) =>
-    (e: React.ChangeEvent<HTMLInputElement> | { target: { value: unknown } }) => {
-      const value = e.target.value;
+    (
+      e:
+        | React.ChangeEvent<HTMLInputElement>
+        | { target: { value: unknown; type?: string; checked?: boolean } },
+    ) => {
+      // 체크박스인지 확인
+      const value = e.target.type === "checkbox" ? e.target.checked : e.target.value;
       setFormData((prev) => {
         const nextState = { ...prev, [field]: value };
         // 날짜 자동 계산 로직
@@ -63,19 +68,27 @@ export function useSponsorshipForm({
     };
 
   // 날짜 변경 핸들러
-  const handleDateChange = (field: "receivedDate" | "uploadDeadline") => (date: Dayjs | null) => {
-    setFormData((prev) => {
-      const nextState = { ...prev, [field]: date };
-      // 날짜 자동 계산 로직
-      if (field === "receivedDate") {
-        const { receivedDate, deadlineDays } = nextState;
-        if (receivedDate && deadlineDays !== "") {
-          nextState.uploadDeadline = receivedDate.add(Number(deadlineDays), "day");
+  const handleDateChange =
+    (field: "receivedDate" | "uploadDeadline" | "uploadedDate") => (date: Dayjs | null) => {
+      setFormData((prev) => {
+        const nextState = { ...prev, [field]: date };
+
+        // 날짜 자동 계산 로직
+        if (field === "receivedDate") {
+          const { receivedDate, deadlineDays } = nextState;
+          if (receivedDate && deadlineDays !== "") {
+            nextState.uploadDeadline = receivedDate.add(Number(deadlineDays), "day");
+          }
         }
-      }
-      return nextState;
-    });
-  };
+        // 컨텐츠 업로드 날짜 입력시 완료 상태로 변경
+        if (field === "uploadedDate") {
+          if (date) {
+            nextState.status = "COMPLETED";
+          }
+        }
+        return nextState;
+      });
+    };
 
   // 이미지 핸들러
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -132,7 +145,7 @@ export function useSponsorshipForm({
         const result = await saveSponsorship(null, submitFormData);
         if (result.success) {
           alert(result.message);
-          setFormData(INITIAL_FORM_DATA)
+          setFormData(INITIAL_FORM_DATA);
           onSuccess(); // 성공 시 모달 닫기 등의 동작 수행
         } else {
           alert(result.message);

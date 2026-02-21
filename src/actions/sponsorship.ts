@@ -77,6 +77,9 @@ export async function saveSponsorship(
   const memo = formData.get("memo") as string;
   const guideUrl = formData.get("guideUrl") as string;
   const purchaseUrl = formData.get("purchaseUrl") as string;
+  const uploadedDate = formData.get("uploadedDate") ? String(formData.get("uploadedDate")) : null;
+  const isPublic = formData.get("isPublic");
+
   /**
    * 이미지 처리 로직
    */
@@ -128,6 +131,8 @@ export async function saveSponsorship(
     upload_deadline: uploadDeadline,
     deadline_days: deadlineDays,
     retention_months: retentionMonths,
+    uploaded_date: uploadedDate,
+    is_public: isPublic,
   };
 
   let error;

@@ -16,6 +16,7 @@ import {
   FormSelect,
   FormDatePicker,
   FormImageUpload,
+  FormCheckbox,
 } from "@/components/common/FormInputs";
 
 interface SponsorshipFormProps {
@@ -27,7 +28,9 @@ interface SponsorshipFormProps {
   isNewMode: boolean;
   // 핸들러들
   onChange: (field: keyof SponsorshipFormData) => (e: any) => void;
-  onDateChange: (field: "receivedDate" | "uploadDeadline") => (date: Dayjs | null) => void;
+  onDateChange: (
+    field: "receivedDate" | "uploadDeadline" | "uploadedDate",
+  ) => (date: Dayjs | null) => void;
   onImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onImageRemove: () => void;
   onSubmit: (e: React.FormEvent) => void;
@@ -68,6 +71,7 @@ export default function SponsorshipForm({
         </button>
       </div>
       <div className="flex flex-1 flex-col gap-6 overflow-y-auto p-6">
+        <FormCheckbox label="공개 여부" value={formData.isPublic} onChange={onChange("isPublic")} />
         {/* 이미지 업로드 */}
         <FormImageUpload
           label="대표 이미지"
@@ -96,7 +100,7 @@ export default function SponsorshipForm({
             placeholder="브랜드명을 입력하세요"
           />
         </div>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <FormSelect
             label="유형"
             required
@@ -137,6 +141,11 @@ export default function SponsorshipForm({
             label="업로드 마감일"
             value={formData.uploadDeadline}
             onChange={onDateChange("uploadDeadline")}
+          />
+          <FormDatePicker
+            label="컨텐츠 업로드 날짜"
+            value={formData.uploadedDate}
+            onChange={onDateChange("uploadedDate")}
           />
         </div>
 

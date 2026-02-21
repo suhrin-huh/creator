@@ -14,6 +14,8 @@ export const INITIAL_FORM_DATA: SponsorshipFormData = {
   description: "",
   memo: "",
   imageUrl: null,
+  uploadedDate: null,
+  isPublic: false,
 };
 
 export const CONTENT_TYPE_OPTIONS = [
