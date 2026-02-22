@@ -4,12 +4,6 @@
 
 "use client";
 
-import { Dayjs } from "dayjs";
-import "dayjs/locale/ko";
-
-import { SponsorshipFormData } from "@/types";
-import { CONTENT_TYPE_OPTIONS, STATUS_OPTIONS } from "@/constants";
-
 // component
 import {
   FormInput,
@@ -19,6 +13,16 @@ import {
   FormCheckbox,
 } from "@/components/common/FormInputs";
 
+import "dayjs/locale/ko";
+
+// types
+import type { Dayjs } from "dayjs";
+import type { SelectChangeEvent } from "@mui/material";
+import { SponsorshipFormData } from "@/types";
+
+// constants
+import { CONTENT_TYPE_OPTIONS, STATUS_OPTIONS } from "@/constants";
+
 interface SponsorshipFormProps {
   formData: SponsorshipFormData;
   previewUrl: string | null;
@@ -27,7 +31,13 @@ interface SponsorshipFormProps {
   isPending: boolean;
   isNewMode: boolean;
   // 핸들러들
-  onChange: (field: keyof SponsorshipFormData) => (e: any) => void;
+  onChange: (
+    field: keyof SponsorshipFormData,
+  ) => (
+    e:
+      | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+      | SelectChangeEvent<string | number>,
+  ) => void;
   onDateChange: (
     field: "receivedDate" | "uploadDeadline" | "uploadedDate",
   ) => (date: Dayjs | null) => void;
@@ -105,7 +115,7 @@ export default function SponsorshipForm({
             label="유형"
             required
             value={formData.contentType}
-            onChange={(e) => onChange("contentType")(e as any)}
+            onChange={onChange("contentType")}
             options={CONTENT_TYPE_OPTIONS}
             errorMessage={errors.contentType}
           />
@@ -113,7 +123,7 @@ export default function SponsorshipForm({
             label="진행 상태"
             required
             value={formData.status}
-            onChange={(e) => onChange("status")(e as any)}
+            onChange={onChange("status")}
             options={STATUS_OPTIONS}
             errorMessage={errors.status}
           />

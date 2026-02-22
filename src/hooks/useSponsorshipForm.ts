@@ -1,7 +1,13 @@
-import { useState, useEffect, useTransition } from "react";
-import { Dayjs } from "dayjs";
+// actions
 import { saveSponsorship } from "@/actions/sponsorship";
-import { SponsorshipFormData } from "@/types"; // 경로 맞춰주세요
+
+// library
+import { useState, useEffect, useTransition } from "react";
+
+// types
+import type { Dayjs } from "dayjs";
+import type { SelectChangeEvent } from "@mui/material";
+import type { SponsorshipFormData } from "@/types"; // 경로 맞춰주세요
 
 import { INITIAL_FORM_DATA } from "@/constants";
 
@@ -48,13 +54,19 @@ export function useSponsorshipForm({
     (field: keyof SponsorshipFormData) =>
     (
       e:
-        | React.ChangeEvent<HTMLInputElement>
-        | { target: { value: unknown; type?: string; checked?: boolean } },
+        | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+        | SelectChangeEvent<string | number>,
     ) => {
+      const target = e.target;
+
       // 체크박스인지 확인
-      const value = e.target.type === "checkbox" ? e.target.checked : e.target.value;
+      const isCheckbox = "type" in target && target.type === "checkbox";
+
+      const value = isCheckbox ? (target as HTMLInputElement).checked : target.value;
+
       setFormData((prev) => {
         const nextState = { ...prev, [field]: value };
+
         // 날짜 자동 계산 로직
         if (field === "deadlineDays") {
           const { receivedDate, deadlineDays } = nextState;
@@ -131,7 +143,6 @@ export function useSponsorshipForm({
     Object.entries(formData).forEach(([key, value]) => {
       if (value === null) return;
       if (key === "receivedDate" || key === "uploadDeadline") {
-        // @ts-ignore (Dayjs 타입 체크)
         if (value) submitFormData.append(key, value.format("YYYY-MM-DD"));
       } else {
         submitFormData.append(key, value);
@@ -142,7 +153,7 @@ export function useSponsorshipForm({
 
     startTransition(async () => {
       try {
-        const result = await saveSponsorship(null, submitFormData);
+        const result = await saveSponsorship(submitFormData);
         if (result.success) {
           alert(result.message);
           setFormData(INITIAL_FORM_DATA);

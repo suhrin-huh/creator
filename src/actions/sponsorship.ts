@@ -5,7 +5,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 
-import { PublicSponsorship } from "@/types";
+import { PublicSponsorship, PublicSponsorshipRow } from "@/types";
 
 export type ActionState = {
   success: boolean;
@@ -25,7 +25,7 @@ export async function getPublicSponsorships(): Promise<PublicSponsorship[]> {
     return [];
   }
 
-  return (data || []).map((item: any) => ({
+  return (data || []).map((item: PublicSponsorshipRow) => ({
     id: item.id,
     title: item.title,
     imageUrl: item.image_url,
@@ -35,10 +35,7 @@ export async function getPublicSponsorships(): Promise<PublicSponsorship[]> {
 }
 
 /** 협찬 관련 내용 저장 */
-export async function saveSponsorship(
-  prevState: ActionState | null,
-  formData: FormData,
-): Promise<ActionState> {
+export async function saveSponsorship(formData: FormData): Promise<ActionState> {
   const supabase = await createClient();
 
   // 현재 로그인한 사용자 확인
