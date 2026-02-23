@@ -50,11 +50,31 @@ export interface SponsorshipFormData extends Omit<
   retentionMonths: number | "";
 }
 
+// admin 협찬 리스트 목록 조회
+export interface AdminSponsorship {
+  id: number;
+  title: string;
+  contentType: ContentType;
+  status: SponsorshipStatus;
+  createdDate: string;
+}
+
 /** DB Row 타입 (DB 매핑용, Snake Case) */
+
+// 공개 리스트
 export interface PublicSponsorshipRow {
   id: number;
   title: string;
   image_url: string | null;
   description: string | null;
   purchase_url: string | null;
+}
+
+// admin 협찬 리스트 목록 조회
+export interface AdminSponsorshipRow {
+  id: number;
+  title: string;
+  content_type: ContentType;
+  status: SponsorshipStatus;
+  created_at: string;
 }

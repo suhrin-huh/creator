@@ -5,7 +5,12 @@
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 
-import { PublicSponsorship, PublicSponsorshipRow } from "@/types";
+import type {
+  AdminSponsorship,
+  AdminSponsorshipRow,
+  PublicSponsorship,
+  PublicSponsorshipRow,
+} from "@/types";
 
 export type ActionState = {
   success: boolean;
@@ -159,4 +164,40 @@ export async function saveSponsorship(formData: FormData): Promise<ActionState> 
   revalidatePath("/sponsorship");
 
   return { success: true, message: "성공적으로 저장되었습니다." };
+}
+
+/** admin 협찬 리스트 조회*/
+export async function getAdminSponsorships(): Promise<AdminSponsorship[]> {
+  const supabase = await createClient();
+
+  // 현재 로그인한 사용자 정보 가져오기
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+
+  if (authError || !user) {
+    console.error("인증되지 않은 사용자입니다.");
+    return [];
+  }
+
+  // 외래키(user_id)를 기반으로 해당 유저의 데이터 조회
+  const { data, error } = await supabase
+    .from("sponsorships")
+    .select("id, title, content_type, status, created_at")
+    .eq("user_id", user.id)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("데이터를 불러오는 중 에러 발생:", error);
+    return [];
+  }
+
+  return (data || []).map((item: AdminSponsorshipRow) => ({
+    id: item.id,
+    title: item.title,
+    contentType: item.content_type,
+    status: item.status,
+    createdDate: item.created_at.split("T")[0],
+  }));
 }
