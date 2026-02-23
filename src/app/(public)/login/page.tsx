@@ -23,7 +23,7 @@ export default function LoginPage() {
         <div className="flex h-[300px] w-[500px] flex-col items-center justify-center rounded-lg border border-gray-300 bg-white p-8">
           <h1 className="text-primary-dark mb-6 text-center text-2xl font-bold">ADMIN ACCESS</h1>
 
-          <form action={formAction} className="flex flex-col gap-4 w-full">
+          <form action={formAction} className="flex w-full flex-col gap-4">
             <div className="flex flex-col gap-1">
               <label htmlFor="password" className="hidden text-sm font-medium text-gray-600">
                 비밀번호
@@ -40,7 +40,7 @@ export default function LoginPage() {
 
             {/* 에러 메시지 표시 */}
             {state?.message && (
-              <p className="text-sm font-medium text-red-500 text-center animate-pulse">
+              <p className="animate-pulse text-center text-sm font-medium text-red-500">
                 {state.message}
               </p>
             )}
@@ -48,7 +48,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isPending}
-              className="h-12 w-full rounded-lg bg-gray-500 font-bold text-white transition-all hover:bg-gray-700 hover:shadow-lg disabled:bg-gray-400 disabled:cursor-not-allowed"
+              className="h-12 w-full rounded-lg bg-gray-500 font-bold text-white transition-all hover:bg-gray-700 hover:shadow-lg disabled:cursor-not-allowed disabled:bg-gray-400"
             >
               {isPending ? "접속 중..." : "접속하기"}
             </button>

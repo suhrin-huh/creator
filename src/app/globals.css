@@ -32,32 +32,32 @@
   --color-accent-active: #2e1b12;
 
   /* 4. Neutral Colors - Cream & Brown Scale */
-  --color-white: #FDFBF7;
-  --color-black: #2C221C;
-  
+  --color-white: #fdfbf7;
+  --color-black: #2c221c;
+
   /* 배경 베이스 (아주 연한 크림) */
-  --color-gray-50: #fbf9f4; 
-  --color-gray-100: #f0ead8;   /* 베이지 (#F0EAD8) - 카드 배경, 헤더 */
+  --color-gray-50: #fbf9f4;
+  --color-gray-100: #f0ead8; /* 베이지 (#F0EAD8) - 카드 배경, 헤더 */
   /* 보더, 구분선 (연한 라떼색) */
-  --color-gray-200: #e3dbc5; 
-  --color-gray-300: #d1c6ad; 
+  --color-gray-200: #e3dbc5;
+  --color-gray-300: #d1c6ad;
   /* 비활성 텍스트 (중간 브라운) */
-  --color-gray-400: #af9f8c; 
-  --color-gray-500: #8f7e6d; 
+  --color-gray-400: #af9f8c;
+  --color-gray-500: #8f7e6d;
   /* 본문 텍스트 (진한 브라운) */
-  --color-gray-600: #6e5646; 
+  --color-gray-600: #6e5646;
   --color-gray-700: #563526; /* 다크 브라운 (#563526) */
-  --color-gray-800: #42281c; 
-  --color-gray-900: #2b1911; 
+  --color-gray-800: #42281c;
+  --color-gray-900: #2b1911;
 
   /* 5. Semantic Colors */
   --color-success: #98ad57; /* Matcha */
   --color-success-light: #e6edd6;
-  --color-info: #aec7e0;    /* Blue */
+  --color-info: #aec7e0; /* Blue */
   --color-info-light: #ebf3fa;
   --color-warning: #eebb4d; /* Warm Yellow */
   --color-warning-light: #fcf4db;
-  --color-danger: #d9756c;  /* Soft Red */
+  --color-danger: #d9756c; /* Soft Red */
   --color-danger-light: #fae6e4;
 
   /* 6. Spacing & Radius */
