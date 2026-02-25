@@ -2,7 +2,7 @@ import type { Dayjs } from "dayjs";
 
 // 공통 리터럴 타입 분리
 export type ContentType = "FEED" | "REEL" | "STORY";
-export type SponsorshipStatus = "WAITING" | "RECEIVED" | "COMPLETED";
+export type Status = "WAITING" | "RECEIVED" | "COMPLETED";
 
 // Master 타입
 export interface Sponsorship {
@@ -20,7 +20,7 @@ export interface Sponsorship {
   retentionMonths: number | null;
   uploadedDate: string | null;
   isPublic: boolean;
-  status: SponsorshipStatus;
+  status: Status;
   memo: string;
 }
 
@@ -55,11 +55,34 @@ export interface AdminSponsorship {
   id: number;
   title: string;
   contentType: ContentType;
-  status: SponsorshipStatus;
+  status: Status;
   createdDate: string;
 }
 
 /** DB Row 타입 (DB 매핑용, Snake Case) */
+
+// Master 타입
+export interface SponsorshipRow {
+  id: number; // required
+  user_id: number; // required
+  title: string; // required
+  brand_name: string;
+  description: string | null;
+  image_url: string | null;
+  guide_url: string | null;
+  purchase_url: string | null;
+  content_type: ContentType;
+  received_date: string | null;
+  deadline_days: number | null;
+  upload_deadline: string | null;
+  retention_months: number | null;
+  status: Status;
+  memo: string | null;
+  created_at: string;
+  updated_at: string;
+  uploaded_date: string | null;
+  is_public: boolean;
+}
 
 // 공개 리스트
 export interface PublicSponsorshipRow {
@@ -75,6 +98,6 @@ export interface AdminSponsorshipRow {
   id: number;
   title: string;
   content_type: ContentType;
-  status: SponsorshipStatus;
+  status: Status;
   created_at: string;
 }

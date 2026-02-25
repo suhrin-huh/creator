@@ -10,6 +10,7 @@ import type {
   AdminSponsorshipRow,
   PublicSponsorship,
   PublicSponsorshipRow,
+  SponsorshipRow,
 } from "@/types";
 
 export type ActionState = {
@@ -200,4 +201,36 @@ export async function getAdminSponsorships(): Promise<AdminSponsorship[]> {
     status: item.status,
     createdDate: item.created_at.split("T")[0],
   }));
+}
+
+/** admin 협찬 개별 데이터 조회 */
+export async function getSponsorshipById(sponsorshipId: number): Promise<SponsorshipRow | null> {
+  const supabase = await createClient();
+
+  // 현재 로그인한 사용자 정보 가져오기
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+
+  if (authError || !user) {
+    console.log("인증되지 않은 사용자입니다.");
+    return null;
+  }
+
+  // 단일 데이터 조회( .single() 사용하여 배열이 아닌 객체를 가져옴)
+  const { data, error } = await supabase
+    .from("sponsorships")
+    .select("*")
+    .eq("id", sponsorshipId)
+    .eq("user_id", user.id)
+    .single();
+
+  if (error) {
+    console.error("상세 데이터를 불러오는 중 에러 발생", error);
+    return null;
+  }
+
+  // DB 데이터 포맷 변환
+  return data;
 }

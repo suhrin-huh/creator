@@ -1,14 +1,17 @@
 // actions
+import { getSponsorshipById } from "@/actions/sponsorship";
 import { saveSponsorship } from "@/actions/sponsorship";
 
 // library
 import { useState, useEffect, useTransition } from "react";
+import dayjs from "dayjs";
 
 // types
 import type { Dayjs } from "dayjs";
 import type { SelectChangeEvent } from "@mui/material";
 import type { SponsorshipFormData } from "@/types"; // 경로 맞춰주세요
 
+// constants
 import { INITIAL_FORM_DATA } from "@/constants";
 
 interface UseSponsorshipFormProps {
@@ -32,13 +35,44 @@ export function useSponsorshipForm({
 
   // 초기 데이터 로드 및 리셋
   useEffect(() => {
-    if (isEditMode && sponsorshipId) {
-      console.log(`Fetch data for ID: ${sponsorshipId}`);
-      // TODO: Fetch logic here
-    } else {
-      // 새 글 모드거나 모달이 닫혔다가 다시 열릴 때 초기화
-      resetForm();
-    }
+    const fetchDetail = async () => {
+      if (isEditMode && sponsorshipId) {
+        const detailData = await getSponsorshipById(Number(sponsorshipId));
+
+        if (detailData) {
+          const formattedData: SponsorshipFormData = {
+            title: detailData.title,
+            brandName: detailData.brand_name || "", // DB가 null을 줄 수 있으므로 빈 문자열 방어
+            description: detailData.description || "",
+            imageUrl: detailData.image_url,
+            guideUrl: detailData.guide_url,
+            purchaseUrl: detailData.purchase_url,
+
+            // null 방어 및 빈 문자열 처리
+            contentType: detailData.content_type || "",
+            status: detailData.status,
+
+            // Number 변환 (타입 단언 as number 없이도 깔끔하게 작동합니다)
+            retentionMonths: detailData.retention_months ? Number(detailData.retention_months) : "",
+            deadlineDays: detailData.deadline_days ? Number(detailData.deadline_days) : "",
+
+            isPublic: detailData.is_public ?? true,
+            memo: detailData.memo || "",
+
+            // 👇 날짜 3총사만 여기서 dayjs로 변환! (값이 있을 때만)
+            receivedDate: detailData.received_date ? dayjs(detailData.received_date) : null,
+            uploadDeadline: detailData.upload_deadline ? dayjs(detailData.upload_deadline) : null,
+            uploadedDate: detailData.uploaded_date ? dayjs(detailData.uploaded_date) : null,
+          };
+
+          setFormData(formattedData);
+        }
+      } else {
+        resetForm();
+      }
+    };
+
+    fetchDetail();
   }, [isEditMode, sponsorshipId]);
 
   const resetForm = () => {

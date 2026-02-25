@@ -85,7 +85,7 @@ export default function SponsorshipForm({
         {/* 이미지 업로드 */}
         <FormImageUpload
           label="대표 이미지"
-          previewUrl={previewUrl}
+          previewUrl={previewUrl ? previewUrl : formData.imageUrl}
           fileSize={fileSize}
           onChange={onImageChange}
           onRemove={onImageRemove}
