@@ -15,23 +15,20 @@ export default function ProductCard({ image, title, description, link }: Product
   return (
     <Link
       href={link}
-      className="p-md flex w-full flex-row items-center overflow-hidden rounded-xl bg-white transition duration-100 hover:shadow-lg active:scale-105"
+      className="p-sm gap-lg flex w-full flex-row items-center rounded-lg bg-white shadow-sm transition-all duration-200 hover:scale-[0.98] hover:shadow-lg active:bg-gray-100/20"
     >
-      {/* 이미지 컨테이너 */}
-      <div className="relative h-20 w-20 min-w-20 shrink-0">
+      <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-md bg-gray-50 md:h-24 md:w-24">
         <Image
           src={image}
-          alt="제품 소개 이미지"
-          fill
-          className="rounded-md object-cover"
-          sizes="(max-width: 768px) 80px, (max-width: 1024px) 50vw, 33vw"
+          alt={title}
+          fill // TODO: 이미지 크기를 부모에서 결정
+          className="object-cover"
+          sizes="(max-width: 768px) 80px, 96px"
         />
       </div>
-
-      {/* 제품 정보 TODO: 제품 정보에 따른 크기 변동으로 인해 스타일 오류 수정*/}
-      <div className="p-md flex-md min-w-0">
-        <h3 className="text-md mb-2 font-bold text-gray-800">{title}</h3>
-        <p className="truncate text-xs text-gray-600">{description}</p>
+      <div className="gap-xs flex h-full min-w-0 flex-1 flex-col">
+        <h3 className="text-body-sm md:text-body-lg truncate font-bold text-gray-800">{title}</h3>
+        <p className="text-body-xs md:text-body-sm line-clamp-3 text-gray-500">{description}</p>
       </div>
     </Link>
   );
