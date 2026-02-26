@@ -1,7 +1,7 @@
 // components
 import Header from "@/components/common/Header";
 import ProfileSection from "./ProfileSection";
-import ProductSection from "./ProductSection";
+import SponsorshipSection from "./SponsorshipSection";
 import Footer from "@/components/common/Footer";
 
 export default function MainContainer() {
@@ -13,7 +13,7 @@ export default function MainContainer() {
         {/* 프로필 */}
         <ProfileSection />
         {/* 광고제품 리스트 */}
-        <ProductSection />
+        <SponsorshipSection />
       </main>
       <Footer />
     </div>
