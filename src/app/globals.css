@@ -6,25 +6,25 @@
      Concept: Matcha, Milk, Blue Sky, Coffee
      ========================================= */
 
-  /* 1. Primary Colors - Matcha Green (#98AD57 Base) */
-  /* 긍정적, 자연, 메인 액션 */
-  --color-primary: #98ad57;
-  --color-primary-light: #b4c57e;
-  --color-primary-dark: #768a41;
+  /* 1. Primary Colors - Matcha Green */
+  /* [용도] 서비스의 핵심 정체성. 사용자가 '가장 먼저 눌러야 하는' 주요 버튼(CTA), 메인 탭, 활성화 상태 표시 */
+  --color-primary: #98ad57; /* 기본 Primary 버튼, 주요 아이콘 */
+  --color-primary-light: #b4c57e; /* Primary 버튼의 호버 배경, 연한 강조 배경 */
+  --color-primary-dark: #768a41; /* 모바일에서 버튼 눌림(Active) 피드백용 */
   --color-primary-hover: #899e4d;
   --color-primary-active: #667838;
-  --color-primary-focus: #98ad57;
+  --color-primary-focus: #98ad57; /* 키보드 탭 이동 시 아웃라인 포커스 컬러 */
 
-  /* 2. Secondary Colors - Soft Sky Blue (#AEC7E0 Base) */
-  /* 신선함, 강조, 포인트 뱃지 */
+  /* 2. Secondary Colors - Soft Sky Blue */
+  /* [용도] 메인 액션은 아니지만 시선을 끌어야 할 때. 신제품 뱃지, 프로모션 배너, 서브 버튼, 정보성 알림 */
   --color-secondary: #aec7e0;
   --color-secondary-light: #dbebf7;
   --color-secondary-dark: #819ebb;
   --color-secondary-hover: #9abddb;
   --color-secondary-active: #6f8ea8;
 
-  /* 3. Accent Colors - Coffee Brown (#563526 Base) */
-  /* 중요 강조, 다크 모드 대응, 텍스트 강조 */
+  /* 3. Accent Colors - Coffee Brown */
+  /* [용도] 중요한 텍스트 강조, 포인트 아이콘. (Primary인 그린과 대비를 이루어 시각적 균형을 잡아줌) */
   --color-accent: #563526;
   --color-accent-light: #7d5a4a;
   --color-accent-dark: #3b2319;
@@ -32,73 +32,89 @@
   --color-accent-active: #2e1b12;
 
   /* 4. Neutral Colors - Cream & Brown Scale */
-  --color-white: #fdfbf7;
+  /* [용도] 배경, 박스 테두리, 일반 텍스트. 콘텐츠를 뒷받침하는 뼈대 역할 */
+  --color-white: #fdfbf7; /* 기본 배경색 (완전한 흰색보다 눈의 피로를 덜어줌) */
   --color-black: #2c221c;
 
-  /* 배경 베이스 (아주 연한 크림) */
-  --color-gray-50: #fbf9f4;
-  --color-gray-100: #f0ead8; /* 베이지 (#F0EAD8) - 카드 배경, 헤더 */
-  /* 보더, 구분선 (연한 라떼색) */
-  --color-gray-200: #e3dbc5;
-  --color-gray-300: #d1c6ad;
-  /* 비활성 텍스트 (중간 브라운) */
-  --color-gray-400: #af9f8c;
-  --color-gray-500: #8f7e6d;
-  /* 본문 텍스트 (진한 브라운) */
-  --color-gray-600: #6e5646;
-  --color-gray-700: #563526; /* 다크 브라운 (#563526) */
-  --color-gray-800: #42281c;
+  --color-gray-50: #fbf9f4; /* 카드 내부 배경색, 입력창(Input) 배경 */
+  --color-gray-100: #f0ead8; /* 헤더/푸터 배경, 호버 시 배경색 */
+
+  --color-gray-200: #e3dbc5; /* 은은한 구분선(Divider), 연한 보더 */
+  --color-gray-300: #d1c6ad; /* 입력창(Input) 기본 보더, 비활성화된 버튼 배경 */
+
+  --color-gray-400: #af9f8c; /* 비활성화된 텍스트(Disabled), 플레이스홀더 */
+  --color-gray-500: #8f7e6d; /* 부가 설명 텍스트 (날짜, 작성자 등 서브 정보) */
+
+  --color-gray-600: #6e5646; /* 본문 텍스트 (가독성이 필요한 일반 텍스트) */
+  --color-gray-700: #563526; /* 소제목, 강조 텍스트 */
+  --color-gray-800: #42281c; /* 대제목 (H1, H2) - 시각적 무게감을 주기 위함 */
   --color-gray-900: #2b1911;
 
-  /* 5. Semantic Colors */
-  --color-success: #98ad57; /* Matcha */
+  /* 5. Semantic Colors (상태 표시) */
+  --color-success: #98ad57; /* 성공 메세지, 완료 아이콘 */
   --color-success-light: #e6edd6;
-  --color-info: #aec7e0; /* Blue */
+  --color-info: #aec7e0; /* 안내 메세지 툴팁 */
   --color-info-light: #ebf3fa;
-  --color-warning: #eebb4d; /* Warm Yellow */
+  --color-warning: #eebb4d; /* 주의 (결제 전 확인 등) */
   --color-warning-light: #fcf4db;
-  --color-danger: #d9756c; /* Soft Red */
+  --color-danger: #d9756c; /* 에러, 삭제 버튼, 경고 메세지 */
   --color-danger-light: #fae6e4;
 
-  /* 6. Spacing & Radius */
-  --spacing-xs: 0.25rem;
-  --spacing-sm: 0.375rem;
-  --spacing-md: 0.5rem;
-  --spacing-lg: 1rem;
-  --spacing-xl: 1.5rem;
-  --spacing-2xl: 2rem;
-  --spacing-3xl: 2.5rem;
-  --radius-sm: 0.25rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 1rem;
-  --radius-xl: 1.5rem;
-  --radius-full: 9999px;
+  /* 6. Spacing (Margin & Padding Guide) */
+  /* [모바일/노트북 공통 가이드]
+     - 4px~8px: 컴포넌트 내부의 아주 좁은 간격 (예: 아이콘과 텍스트 사이)
+     - 12px~16px: 리스트 아이템 간격, 버튼 내부 패딩
+     - 20px~24px: 모바일 화면의 좌우 기본 여백(Padding), 카드와 카드 사이 간격
+     - 32px~48px: 노트북 화면에서의 섹션 간격 (Margin) */
+  --spacing-xs: 0.25rem; /* 4px - 텍스트와 밑줄 간격, 태그 내부 여백 */
+  --spacing-sm: 0.5rem; /* 8px - 아이콘과 라벨 사이, 폼 라벨과 입력창 사이 */
+  --spacing-md: 0.75rem; /* 12px - (추가됨) 모바일 카드 내부 패딩, 작은 버튼 패딩 */
+  --spacing-lg: 1rem; /* 16px - 모바일 좌우 안전 여백(Safe Area), 일반 버튼 패딩 */
+  --spacing-xl: 1.25rem; /* 20px - (추가됨) 넉넉한 모바일 여백, 단락 사이 간격 */
+  --spacing-2xl: 1.5rem; /* 24px - 모바일 섹션 간격, 노트북 컴포넌트 간격 */
+  --spacing-3xl: 2rem; /* 32px - 노트북 섹션 간격 (Header와 Content 사이 등) */
+  --spacing-4xl: 3rem; /* 48px - 큰 컨텐츠 블록 사이의 여백 */
 
-  /* 7. Shadows (따뜻한 브라운 그림자) */
-  --shadow-sm: 0 1px 2px 0 rgba(86, 53, 38, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(86, 53, 38, 0.08);
-  --shadow-lg: 0 10px 15px -3px rgba(86, 53, 38, 0.1);
+  /* Radius (둥글기) */
+  /* 카페 테마이므로 각진 것보다는 부드러운 라운딩이 어울립니다. */
+  --radius-sm: 0.375rem; /* 6px - 입력창(Input), 작은 뱃지 */
+  --radius-md: 0.5rem; /* 8px - 일반 버튼, 드롭다운 메뉴 */
+  --radius-lg: 0.75rem; /* 12px - 모바일 카드, 모달 창 */
+  --radius-xl: 1rem; /* 16px - 넉넉한 노트북용 카드 배경 */
+  --radius-full: 9999px; /* 알약 형태 버튼, 프로필 이미지 */
 
-  /* 8. Text */
+  /* 7. Shadows (따뜻한 브라운 그림자 - 유지) */
+  --shadow-sm: 0 1px 2px 0 rgba(86, 53, 38, 0.05); /* 버튼 기본 상태 */
+  --shadow-md: 0 4px 6px -1px rgba(86, 53, 38, 0.08); /* 카드 기본 상태, 드롭다운 */
+  --shadow-lg: 0 10px 15px -3px rgba(86, 53, 38, 0.1); /* 모달(Dialog), 팝업 */
+
+  /* 8. Text (Typography) */
   /* Heading styles */
-  --text-h1: 2.25rem; /* 36px */
-  --text-h1--line-height: 2.75rem; /* 44px */
-  --text-h2: 1.875rem; /* 30px */
-  --text-h2--line-height: 2.25rem; /* 36px */
-  --text-h3: 1.5rem; /* 24px */
-  --text-h3--line-height: 2rem; /* 32px */
+  --text-h1: 2.5rem; /* 40px (노트북용 강조, 모바일은 text-3xl(30px) 혼용 추천) */
+  --text-h1--line-height: 1.2; /* Heading은 줄간격이 좁아야 시각적으로 하나로 묶여 보입니다. */
+
+  --text-h2: 2rem; /* 32px */
+  --text-h2--line-height: 1.3;
+
+  --text-h3: 1.5rem; /* 24px (모바일 주요 타이틀로 적합) */
+  --text-h3--line-height: 1.4;
 
   /* Body styles */
-  --text-body-lg: 1rem; /* 16px */
-  --text-body--line-height: 1.5rem; /* 24px */
-  --text-body-md: 0.875rem; /* 14px */
-  --text-body-md--line-height: 1.25rem; /* 20px */
-  --text-body-sm: 0.75rem; /* 12px */
-  --text-body-sm--line-height: 1rem; /* 16px */
+  --text-body-lg: 1.125rem; /* 18px - 긴 글 읽기 (블로그 포스트 등) */
+  --text-body-lg--line-height: 1.6;
 
-  /* Caption */
-  --text-caption: 0.625rem; /* 10px */
-  --text-caption--line-height: 1rem; /* 16px */
+  --text-body-md: 1rem; /* 16px - 서비스 기본 본문 텍스트 (가장 추천) */
+  --text-body-md--line-height: 1.5;
+
+  --text-body-sm: 0.875rem; /* 14px - 서브 텍스트, 카드 내부 설명란 */
+  --text-body-sm--line-height: 1.5;
+
+  --text-body-xs: 0.75rem; /* 12px - 서브 텍스트, 카드 내부 설명란 */
+  --text-body-xs--line-height: 1.5;
+
+  /* Caption (10px -> 12px로 상향 조정) */
+  --text-caption: 0.75rem; /* 12px - 최소 가독성 보장 사이즈 (날짜, 저작권, 매우 작은 뱃지) */
+  --text-caption--line-height: 1.4;
 }
 
 .hide-scrollbar::-webkit-scrollbar {
