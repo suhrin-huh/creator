@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import QueryProvider from "@/providers/QueryProvider";
 
 export const metadata: Metadata = {
   title: "허서린의 크리에이터 생활",
@@ -19,7 +20,9 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
-        <div className="flex h-dvh min-h-100 justify-center md:py-4">{children}</div>
+        <QueryProvider>
+          <div className="flex h-dvh min-h-100 justify-center md:py-4">{children}</div>
+        </QueryProvider>
       </body>
     </html>
   );
