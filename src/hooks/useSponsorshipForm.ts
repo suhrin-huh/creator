@@ -1,18 +1,20 @@
 // actions
 import { getSponsorshipById } from "@/actions/sponsorship";
-import { saveSponsorship } from "@/actions/sponsorship";
 
 // library
-import { useState, useEffect, useTransition } from "react";
+import { useState, useEffect } from "react";
 import dayjs from "dayjs";
 
 // types
 import type { Dayjs } from "dayjs";
 import type { SelectChangeEvent } from "@mui/material";
-import type { SponsorshipFormData } from "@/types"; // 경로 맞춰주세요
+import type { SponsorshipFormData } from "@/types";
 
 // constants
 import { INITIAL_FORM_DATA } from "@/constants";
+
+// hooks
+import { useSaveSponsorshipMutation } from "./useSponsorships";
 
 interface UseSponsorshipFormProps {
   isEditMode: boolean;
@@ -31,7 +33,8 @@ export function useSponsorshipForm({
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [fileSize, setFileSize] = useState<number | null>(null);
   const [errors, setErrors] = useState<Partial<Record<keyof SponsorshipFormData, string>>>({});
-  const [isPending, startTransition] = useTransition();
+
+  const mutation = useSaveSponsorshipMutation();
 
   // 초기 데이터 로드 및 리셋
   useEffect(() => {
@@ -42,24 +45,18 @@ export function useSponsorshipForm({
         if (detailData) {
           const formattedData: SponsorshipFormData = {
             title: detailData.title,
-            brandName: detailData.brand_name || "", // DB가 null을 줄 수 있으므로 빈 문자열 방어
-            description: detailData.description || "",
+            brandName: detailData.brand_name || "", // null 방어 및 빈 문자열 처리
+            description: detailData.description || "", // null 방어 및 빈 문자열 처리
             imageUrl: detailData.image_url,
             guideUrl: detailData.guide_url,
             purchaseUrl: detailData.purchase_url,
-
-            // null 방어 및 빈 문자열 처리
-            contentType: detailData.content_type || "",
+            contentType: detailData.content_type || "", // null 방어 및 빈 문자열 처리
             status: detailData.status,
-
-            // Number 변환 (타입 단언 as number 없이도 깔끔하게 작동합니다)
-            retentionMonths: detailData.retention_months ? Number(detailData.retention_months) : "",
-            deadlineDays: detailData.deadline_days ? Number(detailData.deadline_days) : "",
-
+            retentionMonths: detailData.retention_months ? Number(detailData.retention_months) : "", // Number 변환
+            deadlineDays: detailData.deadline_days ? Number(detailData.deadline_days) : "", // Number 변환
             isPublic: detailData.is_public ?? true,
             memo: detailData.memo || "",
-
-            // 👇 날짜 3총사만 여기서 dayjs로 변환! (값이 있을 때만)
+            // 날짜 dayjs로 변환
             receivedDate: detailData.received_date ? dayjs(detailData.received_date) : null,
             uploadDeadline: detailData.upload_deadline ? dayjs(detailData.upload_deadline) : null,
             uploadedDate: detailData.uploaded_date ? dayjs(detailData.uploaded_date) : null,
@@ -95,12 +92,10 @@ export function useSponsorshipForm({
 
       // 체크박스인지 확인
       const isCheckbox = "type" in target && target.type === "checkbox";
-
       const value = isCheckbox ? (target as HTMLInputElement).checked : target.value;
 
       setFormData((prev) => {
         const nextState = { ...prev, [field]: value };
-
         // 날짜 자동 계산 로직
         if (field === "deadlineDays") {
           const { receivedDate, deadlineDays } = nextState;
@@ -153,7 +148,10 @@ export function useSponsorshipForm({
     setFormData((prev) => ({ ...prev, imageUrl: null }));
   };
 
-  // 제출 핸들러
+  /** 제출 핸들러
+   * - 유효성 검사 (required: title, brandName, contentType, status)
+   * -
+   */
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -163,31 +161,31 @@ export function useSponsorshipForm({
     if (!formData.brandName.trim()) newErrors.brandName = "브랜드명을 입력해주세요.";
     if (!formData.contentType) newErrors.contentType = "유형을 선택해주세요.";
     if (!formData.status) newErrors.status = "진행상태를 선택해주세요.";
-
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
 
+    // 데이터 저장을 위한 포맷 변환
     const submitFormData = new FormData();
     submitFormData.append("actionType", isEditMode ? "edit" : "new");
     if (sponsorshipId) submitFormData.append("id", sponsorshipId);
 
-    // 데이터 Append (반복문으로 처리 가능하지만 명시적으로 작성)
     Object.entries(formData).forEach(([key, value]) => {
       if (value === null) return;
-      if (key === "receivedDate" || key === "uploadDeadline") {
+
+      // 날짜 데이터 처리
+      if (key === "receivedDate" || key === "uploadDeadline" || key === "uploadedDate") {
         if (value) submitFormData.append(key, value.format("YYYY-MM-DD"));
       } else {
-        submitFormData.append(key, value);
+        submitFormData.append(key, String(value));
       }
     });
 
     if (imageFile) submitFormData.append("image", imageFile);
 
-    startTransition(async () => {
-      try {
-        const result = await saveSponsorship(submitFormData);
+    mutation.mutate(submitFormData, {
+      onSuccess: (result) => {
         if (result.success) {
           alert(result.message);
           setFormData(INITIAL_FORM_DATA);
@@ -195,10 +193,11 @@ export function useSponsorshipForm({
         } else {
           alert(result.message);
         }
-      } catch (error) {
+      },
+      onError: (error) => {
         console.error(error);
         alert("저장 중 오류가 발생했습니다.");
-      }
+      },
     });
   };
 
@@ -208,7 +207,7 @@ export function useSponsorshipForm({
     previewUrl,
     fileSize,
     errors,
-    isPending,
+    isPending: mutation.isPending,
     handleChange,
     handleDateChange,
     handleImageChange,

@@ -1,34 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { DataGrid, GridRowParams, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { Button, Chip } from "@mui/material";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import { AdminSponsorship } from "@/types";
-import { getAdminSponsorships } from "@/actions/sponsorship";
+import { useAdminSponsorships } from "@/hooks/useSponsorships";
+import type { AdminSponsorship } from "@/types";
 
 export default function SponsorshipListContent() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const [sponsorships, setSponsorships] = useState<AdminSponsorship[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchSponsorships = async () => {
-      setIsLoading(true);
-      try {
-        const data = await getAdminSponsorships();
-        setSponsorships(data);
-      } catch (error) {
-        console.error("데이터 패칭 실패:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchSponsorships();
-  }, []);
+  // React Query를 사용하여 데이터 조회
+  const { data: sponsorships = [], isLoading } = useAdminSponsorships();
 
   // 컬럼 정의
   const columns: GridColDef<AdminSponsorship>[] = [
@@ -131,16 +115,8 @@ export default function SponsorshipListContent() {
       <header className="sticky top-0 z-10 bg-white shadow-sm md:rounded-t-lg">
         <nav className="p-lg flex flex-col items-center justify-between md:flex-row">
           <div className="logo text-h3 text-primary font-bold">Admin</div>
-          {/* <ul className="nav-links gap-x-md flex">
-            {navOptions.map((option) => (
-              <li className="hover:text-primary-hover" key={`li-${option.label}`}>
-                <a href="#test">{option.label}</a>
-              </li>
-            ))}
-          </ul> */}
         </nav>
       </header>
-
       {/* Main Content */}
       <main className="flex flex-1 flex-col gap-6 overflow-y-auto p-8">
         <div className="flex items-center justify-between">
