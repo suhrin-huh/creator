@@ -110,93 +110,86 @@ export default function SponsorshipListContent() {
   };
 
   return (
-    <div className="hide-scrollbar relative flex h-dvh w-full flex-col overflow-hidden bg-gray-50 text-black">
-      {/* Header */}
-      <header className="sticky top-0 z-10 bg-white shadow-sm md:rounded-t-lg">
-        <nav className="p-lg flex flex-col items-center justify-between md:flex-row">
-          <div className="logo text-h3 text-primary font-bold">Admin</div>
-        </nav>
-      </header>
-      {/* Main Content */}
-      <main className="flex flex-1 flex-col gap-6 overflow-y-auto p-8">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-h3 mb-1 font-bold text-gray-600">협찬 리스트</h1>
-            <p className="text-body-md">현재 진행 중인 협찬 및 광고 상품을 관리하세요.</p>
-          </div>
-          <Button
-            variant="contained"
-            disableElevation
-            onClick={handleAddSponsorship}
-            sx={{
-              backgroundColor: "var(--color-primary)",
-              "&:hover": { backgroundColor: "var(--color-primary-dark)" },
-              textTransform: "none",
-              fontWeight: 600,
-              fontSize: "0.95rem",
-              borderRadius: "var(--radius-md)",
-              padding: "0.6rem 1.5rem",
-              boxShadow: "var(--shadow-sm)",
-            }}
-          >
-            + 상품 추가하기
-          </Button>
+    <main className="gap-md flex flex-1 flex-col p-8">
+      <div className="gap-sm flex flex-col items-center justify-between md:flex-row">
+        <div>
+          <p className="text-body-lg font-bold text-gray-600">협찬 리스트</p>
+          <p className="text-body-sm md:text-body-md">
+            현재 진행 중인 협찬 및 광고 상품을 관리하세요.
+          </p>
         </div>
-        {/*DataGrid*/}
-        <div className="flex w-full flex-1 overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
-          <DataGrid
-            rows={sponsorships}
-            columns={columns}
-            showToolbar
-            initialState={{
-              pagination: {
-                paginationModel: { pageSize: 10 },
-              },
-            }}
-            pageSizeOptions={[10, 15, 30, 50]}
-            // disableRowSelectionOnClick
-            onRowClick={handleRowClick} // 클릭 시 URL만 바꿔줌
-            rowHeight={60}
-            sx={{
-              border: "none",
+        <Button
+          variant="contained"
+          disableElevation
+          onClick={handleAddSponsorship}
+          sx={{
+            backgroundColor: "var(--color-primary)",
+            "&:hover": { backgroundColor: "var(--color-primary-dark)" },
+            textTransform: "none",
+            fontWeight: 600,
+            fontSize: "0.95rem",
+            borderRadius: "var(--radius-md)",
+            padding: "0.6rem 1.5rem",
+            boxShadow: "var(--shadow-sm)",
+          }}
+        >
+          + 상품 추가하기
+        </Button>
+      </div>
+      {/*DataGrid*/}
+      <div className="flex w-full flex-1 overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
+        <DataGrid
+          rows={sponsorships}
+          columns={columns}
+          showToolbar
+          initialState={{
+            pagination: {
+              paginationModel: { pageSize: 10 },
+            },
+          }}
+          pageSizeOptions={[10, 15, 30, 50]}
+          // disableRowSelectionOnClick
+          onRowClick={handleRowClick} // 클릭 시 URL만 바꿔줌
+          rowHeight={60}
+          sx={{
+            border: "none",
+            color: "var(--color-gray-800)",
+            fontFamily: "inherit",
+            // 헤더 스타일링
+            "& .MuiDataGrid-columnHeaders": {
+              backgroundColor: "var(--color-gray-50)",
+              borderBottom: "1px solid var(--color-gray-200)",
               color: "var(--color-gray-800)",
-              fontFamily: "inherit",
-              // 헤더 스타일링
-              "& .MuiDataGrid-columnHeaders": {
-                backgroundColor: "var(--color-gray-50)",
-                borderBottom: "1px solid var(--color-gray-200)",
-                color: "var(--color-gray-800)",
-                fontWeight: 700,
-                fontSize: "0.9rem",
+              fontWeight: 700,
+              fontSize: "0.9rem",
+            },
+            // 셀 스타일링
+            "& .MuiDataGrid-cell": {
+              borderBottom: "1px solid var(--color-gray-100)",
+            },
+            // 행 호버 효과
+            "& .MuiDataGrid-row:hover": {
+              backgroundColor: "var(--color-gray-50)",
+            },
+            // 푸터 스타일링
+            "& .MuiDataGrid-footerContainer": {
+              borderTop: "1px solid var(--color-gray-200)",
+              backgroundColor: "var(--color-white)",
+            },
+            // 체크박스 등 아이콘 컬러
+            "& .MuiCheckbox-root": {
+              color: "var(--color-gray-400)",
+            },
+            // 선택된 행
+            "& .MuiDataGrid-row.Mui-selected": {
+              backgroundColor: "var(--color-gray-200)",
+              "&:hover": {
+                backgroundColor: "var(--color-gray-300)", // 호버 시 조금 더 진하게
               },
-              // 셀 스타일링
-              "& .MuiDataGrid-cell": {
-                borderBottom: "1px solid var(--color-gray-100)",
-              },
-              // 행 호버 효과
-              "& .MuiDataGrid-row:hover": {
-                backgroundColor: "var(--color-gray-50)",
-              },
-              // 푸터 스타일링
-              "& .MuiDataGrid-footerContainer": {
-                borderTop: "1px solid var(--color-gray-200)",
-                backgroundColor: "var(--color-white)",
-              },
-              // 체크박스 등 아이콘 컬러
-              "& .MuiCheckbox-root": {
-                color: "var(--color-gray-400)",
-              },
-              // 선택된 행
-              "& .MuiDataGrid-row.Mui-selected": {
-                backgroundColor: "var(--color-gray-200)",
-                "&:hover": {
-                  backgroundColor: "var(--color-gray-300)", // 호버 시 조금 더 진하게
-                },
-              },
-            }}
-          />
-        </div>
-      </main>
-    </div>
+            },
+          }}
+        />
+      </div>
+    </main>
   );
 }

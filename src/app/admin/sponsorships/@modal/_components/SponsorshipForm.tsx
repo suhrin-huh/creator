@@ -65,9 +65,8 @@ export default function SponsorshipForm({
     <form
       onSubmit={onSubmit}
       onClick={(e) => e.stopPropagation()}
-      className="relative flex max-h-[85vh] min-h-[600px] w-[90%] min-w-[600px] flex-col overflow-hidden rounded-xl bg-white shadow-2xl"
+      className="relative flex max-h-[85vh] w-[90%] flex-col overflow-hidden rounded-xl bg-white shadow-2xl md:min-h-150 md:min-w-150"
     >
-      {/* Header */}
       <div className="flex shrink-0 items-center justify-between border-b bg-gray-50 px-6 py-4">
         <h2 className="text-xl font-bold text-gray-800">
           {isNewMode ? "새 상품 추가" : "상품 상세 정보"}
