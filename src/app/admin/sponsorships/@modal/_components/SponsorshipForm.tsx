@@ -13,6 +13,8 @@ import {
   FormCheckbox,
 } from "@/components/common/FormInputs";
 
+import Button from "@/components/common/Button";
+
 import "dayjs/locale/ko";
 
 // types
@@ -80,6 +82,7 @@ export default function SponsorshipForm({
         </button>
       </div>
       <div className="flex flex-1 flex-col gap-6 overflow-y-auto p-6">
+        <div></div>
         <FormCheckbox label="공개 여부" value={formData.isPublic} onChange={onChange("isPublic")} />
         {/* 이미지 업로드 */}
         <FormImageUpload
@@ -191,21 +194,12 @@ export default function SponsorshipForm({
 
       {/* Footer */}
       <div className="flex shrink-0 justify-end gap-3 border-t bg-gray-50 p-4">
-        <button
-          type="button"
-          onClick={onCancel}
-          disabled={isPending}
-          className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
-        >
+        <Button size="sm" colorTheme="outlined" onClick={onCancel} disabled={isPending}>
           취소
-        </button>
-        <button
-          type="submit"
-          disabled={isPending}
-          className="rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-700 disabled:bg-indigo-400"
-        >
+        </Button>
+        <Button size="sm" colorTheme="accent" disabled={isPending} type="submit">
           {isPending ? "저장 중..." : "저장하기"}
-        </button>
+        </Button>
       </div>
     </form>
   );
