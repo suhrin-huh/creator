@@ -1,7 +1,7 @@
 import type { Dayjs } from "dayjs";
 
 // 공통 리터럴 타입 분리
-export type ContentType = "FEED" | "REEL" | "STORY";
+type ContentType = "FEED" | "REEL" | "STORY";
 export type Status = "WAITING" | "RECEIVED" | "COMPLETED";
 
 // Master 타입
