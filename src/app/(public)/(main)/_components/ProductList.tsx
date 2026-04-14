@@ -1,20 +1,20 @@
 "use client";
 
 // components
-import SponsorshipCard from "./SponsorshipCard";
+import ProductCard from "./ProductCard";
 
 // types
 import { PublicProduct } from "@/types";
 
-interface SponsorshipListProps {
+interface ProductListProps {
   productList: PublicProduct[];
 }
 
-export default function SponsorshipList({ productList }: SponsorshipListProps) {
+export default function ProductList({ productList }: ProductListProps) {
   return (
     <div className="gap-md grid w-full grid-cols-1" id="productsGrid">
       {productList.map((product) => (
-        <SponsorshipCard
+        <ProductCard
           key={`product-card-${product.id}`}
           title={product.title}
           image={product.imageUrl}

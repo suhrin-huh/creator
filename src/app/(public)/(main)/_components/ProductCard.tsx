@@ -4,14 +4,14 @@
 import Image from "next/image";
 import Link from "next/link";
 
-interface SponsorshipCardProps {
+interface ProductCardProps {
   image: string;
   title: string;
   description: string;
   link: string;
 }
 
-export default function SponsorshipCard({ image, title, description, link }: SponsorshipCardProps) {
+export default function ProductCard({ image, title, description, link }: ProductCardProps) {
   return (
     <Link
       href={link}

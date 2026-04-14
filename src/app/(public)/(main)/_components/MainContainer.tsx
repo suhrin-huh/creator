@@ -1,6 +1,6 @@
 // components
 import ProfileSection from "./ProfileSection";
-import SponsorshipSection from "./SponsorshipSection";
+import ProductSection from "./ProductSection";
 
 export default function MainContainer() {
   return (
@@ -9,7 +9,7 @@ export default function MainContainer() {
       {/* 프로필 */}
       <ProfileSection />
       {/* 광고제품 리스트 */}
-      <SponsorshipSection />
+      <ProductSection />
     </main>
   );
 }
