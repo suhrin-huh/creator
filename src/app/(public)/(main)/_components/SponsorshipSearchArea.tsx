@@ -6,26 +6,26 @@ import useDebounce from "@/hooks/useDebounce";
 import SearchInput from "./SearchInput";
 import SponsorshipList from "./SponsorshipList";
 
-import { PublicSponsorship } from "@/types";
+import { PublicProduct } from "@/types";
 
 const DEBOUNCE_DELAY = 200;
 
 interface SponsorshipSearchAreaProps {
-  initialSponsorships: PublicSponsorship[]; // 서버에서 받아온 초기 데이터
+  initialProducts: PublicProduct[]; // 서버에서 받아온 초기 데이터
 }
 
-export default function SponsorshipSearchArea({ initialSponsorships }: SponsorshipSearchAreaProps) {
+export default function SponsorshipSearchArea({ initialProducts }: SponsorshipSearchAreaProps) {
   const [keyword, setKeyword] = useState("");
   const debouncedKeyword = useDebounce(keyword, DEBOUNCE_DELAY);
 
-  // 원본(initialSponsorships)과 검색어 이용해 렌더링 시마다 계산
+  // 원본(initialProducts)과 검색어 이용해 렌더링 시마다 계산
   const filteredList = useMemo(() => {
-    if (!debouncedKeyword) return initialSponsorships;
+    if (!debouncedKeyword) return initialProducts;
 
-    return initialSponsorships.filter((sponsorship) =>
-      sponsorship.title.toLowerCase().includes(debouncedKeyword.toLowerCase()),
+    return initialProducts.filter((product) =>
+      product.title.toLowerCase().includes(debouncedKeyword.toLowerCase()),
     );
-  }, [initialSponsorships, debouncedKeyword]);
+  }, [initialProducts, debouncedKeyword]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setKeyword(e.target.value);
@@ -38,7 +38,7 @@ export default function SponsorshipSearchArea({ initialSponsorships }: Sponsorsh
   return (
     <>
       <SearchInput value={keyword} onChange={handleChange} onClick={handleClear} />
-      <SponsorshipList sponsorshipList={filteredList} />
+      <SponsorshipList productList={filteredList} />
     </>
   );
 }
