@@ -4,17 +4,19 @@ import { ChangeEvent, useState, useMemo } from "react";
 import useDebounce from "@/hooks/useDebounce";
 
 import SearchInput from "./SearchInput";
-import SponsorshipList from "./SponsorshipList";
+import ProductList from "./ProductList";
 
 import { PublicProduct } from "@/types";
 
 const DEBOUNCE_DELAY = 200;
 
-interface SponsorshipSearchAreaProps {
+interface ProductSearchAreaSearchAreaProps {
   initialProducts: PublicProduct[]; // 서버에서 받아온 초기 데이터
 }
 
-export default function SponsorshipSearchArea({ initialProducts }: SponsorshipSearchAreaProps) {
+export default function ProductSearchAreaSearchArea({
+  initialProducts,
+}: ProductSearchAreaSearchAreaProps) {
   const [keyword, setKeyword] = useState("");
   const debouncedKeyword = useDebounce(keyword, DEBOUNCE_DELAY);
 
@@ -38,7 +40,7 @@ export default function SponsorshipSearchArea({ initialProducts }: SponsorshipSe
   return (
     <>
       <SearchInput value={keyword} onChange={handleChange} onClick={handleClear} />
-      <SponsorshipList productList={filteredList} />
+      <ProductList productList={filteredList} />
     </>
   );
 }
