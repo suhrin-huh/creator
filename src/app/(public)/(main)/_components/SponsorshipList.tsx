@@ -4,22 +4,22 @@
 import SponsorshipCard from "./SponsorshipCard";
 
 // types
-import { PublicSponsorship } from "@/types";
+import { PublicProduct } from "@/types";
 
 interface SponsorshipListProps {
-  sponsorshipList: PublicSponsorship[];
+  productList: PublicProduct[];
 }
 
-export default function SponsorshipList({ sponsorshipList }: SponsorshipListProps) {
+export default function SponsorshipList({ productList }: SponsorshipListProps) {
   return (
     <div className="gap-md grid w-full grid-cols-1" id="productsGrid">
-      {sponsorshipList.map((sponsorship) => (
+      {productList.map((product) => (
         <SponsorshipCard
-          key={`product-card-${sponsorship.id}`}
-          title={sponsorship.title}
-          image={sponsorship.imageUrl}
-          description={sponsorship.description}
-          link={sponsorship.purchaseUrl}
+          key={`product-card-${product.id}`}
+          title={product.title}
+          image={product.imageUrl}
+          description={product.description}
+          link={product.purchaseUrl}
         />
       ))}
     </div>
