@@ -4,7 +4,7 @@
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 
 // hook
-import { useSponsorshipForm } from "@/hooks/useSponsorshipForm";
+import { useProductForm } from "@/hooks/useProductForm";
 
 // component
 import SponsorshipForm from "./SponsorshipForm";
@@ -17,32 +17,36 @@ export default function SponsorshipModalContent() {
 
   // URL에서 파라미터 추출
   const action = searchParams.get("action");
-  const sponsorshipId = searchParams.get("sponsorshipId");
+  const productId = searchParams.get("productId");
   const isNewMode = action === "new";
-  const isEditMode = action === "edit" && !!sponsorshipId;
+  const isEditMode = action === "edit" && !!productId;
 
   // 모달 닫기 핸들러
   const handleClose = () => {
     const params = new URLSearchParams(searchParams.toString());
     params.delete("action");
-    params.delete("sponsorshipId");
+    params.delete("productId");
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
   const {
-    formData,
+    productFormData,
+    detailFormData,
     previewUrl,
     fileSize,
     errors,
     isPending,
-    handleChange,
-    handleDateChange,
+    handleProductChange,
+    handleDetailChange,
+    handleProductDateChange,
+    handleDetailDateChange,
+    handleContentTypeToggle,
     handleImageChange,
     handleImageRemove,
     handleSubmit,
-  } = useSponsorshipForm({
+  } = useProductForm({
     isEditMode,
-    sponsorshipId,
+    productId,
     onSuccess: handleClose,
   });
 
@@ -55,14 +59,18 @@ export default function SponsorshipModalContent() {
       onClick={handleClose}
     >
       <SponsorshipForm
-        formData={formData}
+        productFormData={productFormData}
+        detailFormData={detailFormData}
         previewUrl={previewUrl}
         fileSize={fileSize}
         errors={errors}
         isPending={isPending}
         isNewMode={isNewMode}
-        onChange={handleChange}
-        onDateChange={handleDateChange}
+        onProductChange={handleProductChange}
+        onDetailChange={handleDetailChange}
+        onProductDateChange={handleProductDateChange}
+        onDetailDateChange={handleDetailDateChange}
+        onContentTypeToggle={handleContentTypeToggle}
         onImageChange={handleImageChange}
         onImageRemove={handleImageRemove}
         onSubmit={handleSubmit}
