@@ -5,6 +5,7 @@ import { useActionState } from "react"; // Next.js 14라면 'react-dom'의 useFo
 
 // components
 import { FormInput } from "@/components/common/FormInputs";
+import Button from "@/components/common/Button";
 
 // action
 import { login } from "@/actions/auth";
@@ -30,13 +31,9 @@ export default function LoginForm() {
           errorMessage={state?.message}
         />
       </div>
-      <button
-        type="submit"
-        disabled={isPending}
-        className="p-sm rounded-lg bg-gray-500 font-bold text-white transition-all hover:bg-gray-700 hover:shadow-lg disabled:cursor-not-allowed disabled:bg-gray-400"
-      >
+      <Button type="submit" size="full" colorTheme="accent">
         {isPending ? "접속 중..." : "접속하기"}
-      </button>
+      </Button>
     </form>
   );
 }

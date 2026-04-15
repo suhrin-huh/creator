@@ -3,8 +3,8 @@
 import { DataGrid, GridRowParams, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { Button, Chip } from "@mui/material";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import { useAdminSponsorships } from "@/hooks/useSponsorships";
-import type { AdminSponsorship } from "@/types";
+import { useAdminProducts } from "@/hooks/useProducts";
+import type { AdminProduct } from "@/types";
 
 export default function SponsorshipListContent() {
   const router = useRouter();
@@ -12,13 +12,13 @@ export default function SponsorshipListContent() {
   const searchParams = useSearchParams();
 
   // React Query를 사용하여 데이터 조회
-  const { data: sponsorships = [], isLoading } = useAdminSponsorships();
+  const { data: products = [], isLoading } = useAdminProducts();
 
   // 컬럼 정의
-  const columns: GridColDef<AdminSponsorship>[] = [
+  const columns: GridColDef<AdminProduct>[] = [
     {
       field: "title",
-      headerName: "협찬건 제목",
+      headerName: "제품 제목",
       flex: 2,
       renderCell: (params) => (
         <div className="flex h-full flex-col justify-center py-1">
@@ -30,15 +30,23 @@ export default function SponsorshipListContent() {
       field: "contentType",
       headerName: "컨텐츠 유형",
       flex: 0.9,
-      renderCell: (params: GridRenderCellParams<AdminSponsorship>) => {
+      renderCell: (params: GridRenderCellParams<AdminProduct>) => {
         const typeMap: Record<string, string> = {
           FEED: "피드",
           REEL: "릴스",
           STORY: "스토리",
         };
+        const types: string[] | null = params.row.contentType;
+        if (!types || types.length === 0) {
+          return <span className="text-sm text-gray-400">-</span>;
+        }
         return (
-          <div className="flex h-full items-center gap-2 text-gray-700">
-            <span className="text-sm">{typeMap[params.row.contentType]}</span>
+          <div className="flex h-full items-center gap-1 text-gray-700">
+            {types.map((t) => (
+              <span key={t} className="text-sm">
+                {typeMap[t] ?? t}
+              </span>
+            ))}
           </div>
         );
       },
@@ -48,9 +56,9 @@ export default function SponsorshipListContent() {
       headerName: "진행 상태",
       flex: 0.9,
       renderCell: (params) => {
-        let label = params.value;
+        let label = "-";
         let bg = "transparent";
-        let color = "inherit";
+        let color = "var(--color-gray-400)";
 
         switch (params.value) {
           case "WAITING":
@@ -87,18 +95,22 @@ export default function SponsorshipListContent() {
       },
     },
     {
-      field: "createdDate",
+      field: "createdAt",
       headerName: "등록일",
       flex: 1,
-      renderCell: (params) => <span className="text-sm text-gray-500">{params.value}</span>,
+      renderCell: (params) => (
+        <span className="text-sm text-gray-500">
+          {params.value ? String(params.value).split("T")[0] : "-"}
+        </span>
+      ),
     },
   ];
 
   // 행 클릭 핸들러: Modal 컨트롤, URL 변경시 @modal/page.tsx가 이를 감지해 자동으로 뜬다
-  const handleRowClick = (params: GridRowParams<AdminSponsorship>) => {
+  const handleRowClick = (params: GridRowParams<AdminProduct>) => {
     const newParams = new URLSearchParams(searchParams.toString());
     newParams.set("action", "edit");
-    newParams.set("sponsorshipId", params.id.toString());
+    newParams.set("productId", params.id.toString());
     router.replace(`${pathname}?${newParams.toString()}`, { scroll: false });
   };
 
@@ -139,8 +151,9 @@ export default function SponsorshipListContent() {
       {/*DataGrid*/}
       <div className="flex w-full flex-1 overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
         <DataGrid
-          rows={sponsorships}
+          rows={products}
           columns={columns}
+          loading={isLoading}
           showToolbar
           initialState={{
             pagination: {

@@ -1,5 +1,6 @@
 // components
 import { TextField, Select, MenuItem, FormControl } from "@mui/material";
+import Button from "./Button";
 
 // library
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -185,13 +186,9 @@ export const FormImageUpload = ({
           {previewUrl ? (
             // [상태 A] 이미지가 있을 때: 초기화 버튼 + 용량
             <div className="flex flex-col gap-1">
-              <button
-                type="button"
-                onClick={onRemove}
-                className="rounded-md border border-red-200 bg-white px-4 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-50 focus:outline-none"
-              >
+              <Button type="button" size="sm" colorTheme="danger" onClick={onRemove}>
                 이미지 초기화
-              </button>
+              </Button>
 
               {/* 용량 표시 (값이 있을 때만) */}
               {fileSize && (
@@ -203,17 +200,19 @@ export const FormImageUpload = ({
           ) : (
             // [상태 B] 이미지가 없을 때: 업로드 버튼 + 안내 문구
             <div className="flex flex-col gap-1">
-              <label className="inline-flex cursor-pointer items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-50">
-                이미지 선택
-                <input
-                  type="file"
-                  hidden
-                  accept="image/*"
-                  onChange={onChange}
-                  // 중요: 같은 파일 다시 선택 시 onChange 발동되게 초기화
-                  onClick={(e) => (e.currentTarget.value = "")}
-                />
-              </label>
+              <Button size="sm" colorTheme="outlined">
+                <label className="">
+                  이미지 선택
+                  <input
+                    type="file"
+                    hidden
+                    accept="image/*"
+                    onChange={onChange}
+                    // 중요: 같은 파일 다시 선택 시 onChange 발동되게 초기화
+                    onClick={(e) => (e.currentTarget.value = "")}
+                  />
+                </label>
+              </Button>
               <span className="ml-1 text-xs text-gray-500">jpg, png, webp (최대 5MB)</span>
             </div>
           )}
