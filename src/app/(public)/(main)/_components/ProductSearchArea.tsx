@@ -106,8 +106,8 @@ export default function ProductSearchAreaSearchArea({
           type="text"
           value={keyword}
           onChange={handleChange}
-          placeholder="제품을 검색해보세요"
-          className="bg-input-bg border-btn-border font-ko text-text-main placeholder:text-text-muted focus:border-text-main flex-1 border-2 px-2.5 py-1.5 text-[13px] shadow-[inset_1px_1px_0_rgba(100,120,180,0.12)] outline-none"
+          placeholder="제품을 검색해보세요."
+          className="bg-input-bg border-btn-border font-ko text-text-main placeholder:text-text-muted focus:border-text-main flex-1 border-2 px-2.5 py-1.5 text-[13px] outline-none"
           aria-label="제품 검색"
         />
 
@@ -122,7 +122,7 @@ export default function ProductSearchAreaSearchArea({
       </div>
       <div className="divide-win-border divide-y">
         {filteredList.length === 0 ? (
-          <div className="font-pixel text-text-muted py-8 text-center text-[7px] leading-[2.5]">
+          <div className="font-pixel text-text-muted text-body-xs py-8 text-center leading-[2.5]">
             ✕ no results found
             <br />
             다른 키워드로 검색해보세요
@@ -132,10 +132,10 @@ export default function ProductSearchAreaSearchArea({
             <Link
               key={`product-card-${product.id}`}
               href={product.purchaseUrl}
-              className="p-sm gap-lg flex w-full flex-row items-center shadow-sm transition-all duration-200 hover:shadow-lg active:bg-gray-100/20"
+              className="p-sm gap-lg hover:bg-text-muted/10 active:bg-text-muted/20 flex w-full flex-row items-center transition-all duration-200"
             >
-              <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-md border-r-2 bg-gray-50 md:h-24 md:w-24">
-                {/* TODO: 이미지 대체 아이콘 추가 필요아 */}
+              <div className="p-sm relative h-20 w-20 shrink-0 overflow-hidden rounded-md bg-gray-50 md:h-24 md:w-24">
+                {/* TODO: 이미지 대체 아이콘 추가 필요 */}
                 <Image
                   src={product.imageUrl}
                   alt={product.title}

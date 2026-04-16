@@ -3,14 +3,13 @@
 // components
 import Image from "next/image";
 import PixelWindow from "@/components/common/PixelWindow";
-import PixelButton from "@/components/common/PixelButton";
-
-// icon
-import { PiInstagramLogoFill } from "react-icons/pi";
-import { SiNaver } from "react-icons/si";
 
 // assets
 import ProfileImage from "@/assets/image/profile-image.png";
+import InstagramPixelIcon from "@/assets/image/instgram-pixel-icon.png";
+import NaverPixelIcon from "@/assets/image/naver-pixel-icon.png";
+import MailPixelIcon from "@/assets/image/mail-pixel-icon.png";
+import Link from "next/link";
 
 export default function ProfileSection() {
   /** 새롭게 정의한 프로필 정보 */
@@ -27,7 +26,7 @@ export default function ProfileSection() {
         id: "instagram",
         label: "Instagram",
         href: "https://www.instagram.com/suhrinhuh",
-        icon: <PiInstagramLogoFill />,
+        icon: InstagramPixelIcon,
         color: "#7638fa",
         borderColor: "#4a6c1c",
       },
@@ -35,7 +34,7 @@ export default function ProfileSection() {
         id: "blog",
         label: "Blog",
         href: "https://blog.naver.com/suh_rin",
-        icon: <SiNaver />,
+        icon: NaverPixelIcon,
         color: "#4cae4f",
         borderColor: "#2e7d32",
       },
@@ -44,30 +43,20 @@ export default function ProfileSection() {
 
   if (true)
     return (
-      <PixelWindow
-        title="PROFILE_INFO.EXE"
-        statusBar={
-          <>
-            <span>✦ P loaded</span>
-          </>
-        }
-      >
+      <PixelWindow title="PROFILE_INFO.EXE" statusBar={<span>✦ P loaded</span>}>
         <div className="flex flex-col items-center gap-3 px-5 py-7 text-center">
           {/* 아바타 */}
           <div className="pixel-avatar">
             <Image src={PROFILE_INFO.image.src} alt={PROFILE_INFO.image.alt} />
-            {/* <span className="text-4xl text-white/70">☺</span> */}
           </div>
-
-          {/* 이름 */}
-          <h1 className="text-text-main text-[22px] font-bold">{PROFILE_INFO.name}</h1>
-
-          {/* 이메일 */}
+          {/* 이름 및 이메일 */}
           <div className="text-text-muted flex items-center gap-1.5 text-xs">
-            <span className="pixel-email-dot" />
-            {PROFILE_INFO.email}
+            <h1 className="text-text-main text-[22px] font-bold">{PROFILE_INFO.name}</h1>
+            <div className="relative h-6 w-6">
+              <Image src={MailPixelIcon} alt="이메일 아이콘" fill />
+            </div>
+            <span className="">{PROFILE_INFO.email}</span>
           </div>
-
           {/* 소개 */}
           <p className="text-text-main max-w-[480px] text-[13px] leading-relaxed">
             {PROFILE_INFO.bio.split("\n").map((line, i) => (
@@ -80,17 +69,16 @@ export default function ProfileSection() {
           {/* 링크 버튼들 */}
           <div className="flex flex-wrap justify-center gap-2.5">
             {PROFILE_INFO.links.map((link) => (
-              <PixelButton
-                key={link.id}
-                as="a"
-                // href={link.href}
-                target="_blank"
-                icon={link.icon}
-                bgColor={link.color}
-                borderColor={link.borderColor}
+              <Link
+                href={link.href}
+                key={link.label}
+                className="gap-sm flex items-center hover:scale-90"
               >
-                {link.label}
-              </PixelButton>
+                <div className="relative h-5 w-5">
+                  <Image src={link.icon} alt={link.label} fill />
+                </div>
+                <p className="text-caption">{link.label}</p>
+              </Link>
             ))}
           </div>
         </div>
