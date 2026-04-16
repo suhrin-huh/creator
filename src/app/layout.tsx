@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
 import "./globals.css";
+import type { Metadata } from "next";
 import QueryProvider from "@/providers/QueryProvider";
 
 export const metadata: Metadata = {
@@ -21,7 +21,9 @@ export default function RootLayout({
     <html lang="ko">
       <body>
         <QueryProvider>
-          <div className="flex h-dvh min-h-100 justify-center md:py-4">{children}</div>
+          <div className="md:py-md flex h-dvh min-h-100 justify-center overflow-hidden">
+            {children}
+          </div>
         </QueryProvider>
       </body>
     </html>
