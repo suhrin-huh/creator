@@ -1,9 +1,5 @@
+// PixelBackground.tsx
 "use client";
-
-// ════════════════════════════════
-//  PixelBackground — 별 + 구름 배경 레이어
-//  fixed 포지션, z-index 0
-// ════════════════════════════════
 
 import { useEffect, useRef } from "react";
 
@@ -20,7 +16,6 @@ const CLOUD_DEFS = [
   { type: "md" as const, top: "50%", dur: 48, delay: 28 },
 ];
 
-// 픽셀 구름 SVG 생성
 function makeCloudSVG(type: "sm" | "md" | "lg"): string {
   const configs = {
     sm: {
@@ -56,7 +51,6 @@ export default function PixelBackground() {
     const layer = ref.current;
     if (!layer) return;
 
-    // 별 생성
     for (let i = 0; i < 55; i++) {
       const s = document.createElement("span");
       s.className = "bg-star";
@@ -73,7 +67,6 @@ export default function PixelBackground() {
       layer.appendChild(s);
     }
 
-    // 구름 생성
     CLOUD_DEFS.forEach((def) => {
       const div = document.createElement("div");
       div.className = "bg-cloud";
@@ -82,13 +75,12 @@ export default function PixelBackground() {
         `--cdur:${def.dur}s`,
         `--cdelay:-${def.delay}s`,
         "--from:-180px",
-        "--to:calc(100vw + 200px)",
+        "--to:calc(100% + 200px)", // vw → % 로 변경
       ].join(";");
       div.innerHTML = makeCloudSVG(def.type);
       layer.appendChild(div);
     });
 
-    // cleanup
     return () => {
       if (layer) layer.innerHTML = "";
     };
@@ -98,7 +90,9 @@ export default function PixelBackground() {
     <div
       ref={ref}
       aria-hidden="true"
-      className="pointer-events-none fixed inset-0 z-0 overflow-hidden"
+      // fixed → absolute: 부모 컨테이너 안에 갇힘
+      // -z-10: Tailwind 기본 제공, z-index: -10 → 형제 요소보다 항상 아래
+      className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
     />
   );
 }
