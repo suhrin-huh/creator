@@ -476,3 +476,14 @@
   background: linear-gradient(160deg, #b8cef0 0%, #c8d8f8 45%, #d8d0f0 100%);
   background-attachment: fixed; /* 스크롤 시 배경은 고정되길 원한다면 추가 */
 }
+
+/* 배터리 셀 + 바운스 keyframe */
+@keyframes pixelBounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-5px);
+  }
+}
