@@ -1,15 +1,44 @@
 "use client";
 
+import { useState, useEffect } from "react"; // 추가
+import { useMediaQuery, useTheme } from "@mui/material"; // 추가
+
 import { DataGrid, GridRowParams, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
-import { Button, Chip } from "@mui/material";
+import { Chip } from "@mui/material";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { useAdminProducts } from "@/hooks/useProducts";
 import type { AdminProduct } from "@/types";
+import PixelButton from "@/components/common/PixelButton";
 
 export default function SponsorshipListContent() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+
+  const theme = useTheme();
+  // sm(600px) 이상일 때만 true
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+  const [columnVisibilityModel, setColumnVisibilityModel] = useState({});
+
+  // 화면 크기가 변할 때마다 노출할 컬럼 제어
+  useEffect(() => {
+    setColumnVisibilityModel({
+      createdAt: isMobile ? false : true, // 모바일에서는 등록일 숨기기
+      // 더 숨기고 싶은 필드가 있다면 여기에 추가
+    });
+
+    setPaginationModel((prev) => ({
+      ...prev,
+      pageSize: isMobile ? 5 : 10, // 모바일은 5개, 데스크탑은 10개
+    }));
+  }, [isMobile]);
+
+  // 1. paginationModel을 상태로 관리
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 10, // 초기값
+  });
 
   // React Query를 사용하여 데이터 조회
   const { data: products = [], isLoading } = useAdminProducts();
@@ -25,31 +54,6 @@ export default function SponsorshipListContent() {
           <p className="leading-tight font-semibold text-gray-900">{params.value}</p>
         </div>
       ),
-    },
-    {
-      field: "contentType",
-      headerName: "컨텐츠 유형",
-      flex: 0.9,
-      renderCell: (params: GridRenderCellParams<AdminProduct>) => {
-        const typeMap: Record<string, string> = {
-          FEED: "피드",
-          REEL: "릴스",
-          STORY: "스토리",
-        };
-        const types: string[] | null = params.row.contentType;
-        if (!types || types.length === 0) {
-          return <span className="text-sm text-gray-400">-</span>;
-        }
-        return (
-          <div className="flex h-full items-center gap-1 text-gray-700">
-            {types.map((t) => (
-              <span key={t} className="text-sm">
-                {typeMap[t] ?? t}
-              </span>
-            ))}
-          </div>
-        );
-      },
     },
     {
       field: "status",
@@ -72,7 +76,7 @@ export default function SponsorshipListContent() {
             color = "var(--color-gray-800)";
             break;
           case "COMPLETED":
-            label = "완료";
+            label = "업로드완료";
             bg = "var(--color-success-light)";
             color = "var(--color-success-dark)";
             break;
@@ -122,31 +126,12 @@ export default function SponsorshipListContent() {
   };
 
   return (
-    <main className="gap-md flex flex-1 flex-col p-8">
-      <div className="gap-sm flex flex-col items-center justify-between md:flex-row">
-        <div>
-          <p className="text-body-lg font-bold text-gray-600">협찬 리스트</p>
-          <p className="text-body-sm md:text-body-md">
-            현재 진행 중인 협찬 및 광고 상품을 관리하세요.
-          </p>
-        </div>
-        <Button
-          variant="contained"
-          disableElevation
-          onClick={handleAddSponsorship}
-          sx={{
-            backgroundColor: "var(--color-primary)",
-            "&:hover": { backgroundColor: "var(--color-primary-dark)" },
-            textTransform: "none",
-            fontWeight: 600,
-            fontSize: "0.95rem",
-            borderRadius: "var(--radius-md)",
-            padding: "0.6rem 1.5rem",
-            boxShadow: "var(--shadow-sm)",
-          }}
-        >
-          + 상품 추가하기
-        </Button>
+    <main className="gap-md flex flex-1 flex-col">
+      <div className="gap-sm flex items-center justify-between">
+        <p className="text-body-xs font-pixel">Product List</p>
+        <PixelButton variant="primary" onClick={handleAddSponsorship}>
+          Add a product
+        </PixelButton>
       </div>
       {/*DataGrid*/}
       <div className="flex w-full flex-1 overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
@@ -154,50 +139,36 @@ export default function SponsorshipListContent() {
           rows={products}
           columns={columns}
           loading={isLoading}
+          // 가시성 모델 적용
+          columnVisibilityModel={columnVisibilityModel}
+          onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
           showToolbar
           initialState={{
             pagination: {
               paginationModel: { pageSize: 10 },
             },
           }}
-          pageSizeOptions={[10, 15, 30, 50]}
+          paginationModel={paginationModel}
+          onPaginationModelChange={setPaginationModel}
+          pageSizeOptions={[5, 10, 15, 30, 50]}
           // disableRowSelectionOnClick
           onRowClick={handleRowClick} // 클릭 시 URL만 바꿔줌
-          rowHeight={60}
+          rowHeight={50}
           sx={{
-            border: "none",
-            color: "var(--color-gray-800)",
-            fontFamily: "inherit",
             // 헤더 스타일링
             "& .MuiDataGrid-columnHeaders": {
-              backgroundColor: "var(--color-gray-50)",
               borderBottom: "1px solid var(--color-gray-200)",
-              color: "var(--color-gray-800)",
-              fontWeight: 700,
               fontSize: "0.9rem",
-            },
-            // 셀 스타일링
-            "& .MuiDataGrid-cell": {
-              borderBottom: "1px solid var(--color-gray-100)",
             },
             // 행 호버 효과
             "& .MuiDataGrid-row:hover": {
-              backgroundColor: "var(--color-gray-50)",
-            },
-            // 푸터 스타일링
-            "& .MuiDataGrid-footerContainer": {
-              borderTop: "1px solid var(--color-gray-200)",
-              backgroundColor: "var(--color-white)",
-            },
-            // 체크박스 등 아이콘 컬러
-            "& .MuiCheckbox-root": {
-              color: "var(--color-gray-400)",
+              backgroundColor: "var(--color-win-bg)",
             },
             // 선택된 행
             "& .MuiDataGrid-row.Mui-selected": {
-              backgroundColor: "var(--color-gray-200)",
+              backgroundColor: "var(--color-win-bg)",
               "&:hover": {
-                backgroundColor: "var(--color-gray-300)", // 호버 시 조금 더 진하게
+                backgroundColor: "var(--color-win-border)", // 호버 시 조금 더 진하게
               },
             },
           }}
