@@ -41,47 +41,46 @@ export default function ProfileSection() {
     ],
   };
 
-  if (true)
-    return (
-      <PixelWindow title="PROFILE_INFO.EXE" statusBar={<span>✦ P loaded</span>}>
-        <div className="flex flex-col items-center gap-3 px-5 py-7 text-center">
-          {/* 아바타 */}
-          <div className="pixel-avatar">
-            <Image src={PROFILE_INFO.image.src} alt={PROFILE_INFO.image.alt} />
-          </div>
-          {/* 이름 및 이메일 */}
-          <div className="text-text-muted flex items-center gap-1.5 text-xs">
-            <h1 className="text-text-main text-[22px] font-bold">{PROFILE_INFO.name}</h1>
-            <div className="relative h-6 w-6">
-              <Image src={MailPixelIcon} alt="이메일 아이콘" fill />
-            </div>
-            <span className="">{PROFILE_INFO.email}</span>
-          </div>
-          {/* 소개 */}
-          <p className="text-text-main max-w-[480px] text-[13px] leading-relaxed">
-            {PROFILE_INFO.bio.split("\n").map((line, i) => (
-              <span key={i}>
-                {line}
-                {i < PROFILE_INFO.bio.split("\n").length - 1 && <br />}
-              </span>
-            ))}
-          </p>
-          {/* 링크 버튼들 */}
-          <div className="flex flex-wrap justify-center gap-2.5">
-            {PROFILE_INFO.links.map((link) => (
-              <Link
-                href={link.href}
-                key={link.label}
-                className="gap-sm flex items-center hover:scale-90"
-              >
-                <div className="relative h-5 w-5">
-                  <Image src={link.icon} alt={link.label} fill />
-                </div>
-                <p className="text-caption">{link.label}</p>
-              </Link>
-            ))}
-          </div>
+  return (
+    <PixelWindow title="PROFILE_INFO.EXE" statusBar={<span>✦ P loaded</span>}>
+      <div className="p-md flex flex-col items-center gap-3 text-center">
+        {/* 아바타 */}
+        <div className="pixel-avatar">
+          <Image src={PROFILE_INFO.image.src} alt={PROFILE_INFO.image.alt} />
         </div>
-      </PixelWindow>
-    );
+        {/* 이름 및 이메일 */}
+        <div className="text-text-muted flex items-center gap-1.5 text-xs">
+          <h1 className="text-text-main text-[22px] font-bold">{PROFILE_INFO.name}</h1>
+          <div className="relative h-6 w-6">
+            <Image src={MailPixelIcon} alt="이메일 아이콘" fill />
+          </div>
+          <span className="">{PROFILE_INFO.email}</span>
+        </div>
+        {/* 소개 */}
+        <p className="text-text-main max-w-[480px] text-[13px] leading-relaxed">
+          {PROFILE_INFO.bio.split("\n").map((line, i) => (
+            <span key={i}>
+              {line}
+              {i < PROFILE_INFO.bio.split("\n").length - 1 && <br />}
+            </span>
+          ))}
+        </p>
+        {/* 링크 버튼들 */}
+        <div className="flex flex-wrap justify-center gap-2.5">
+          {PROFILE_INFO.links.map((link) => (
+            <Link
+              href={link.href}
+              key={link.label}
+              className="gap-sm flex items-center hover:scale-90"
+            >
+              <div className="relative h-5 w-5">
+                <Image src={link.icon} alt={link.label} fill />
+              </div>
+              <p className="text-caption">{link.label}</p>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </PixelWindow>
+  );
 }
