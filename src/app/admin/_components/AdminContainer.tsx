@@ -21,7 +21,7 @@ export default function AdminContainer() {
       <PixelWindow title="WAITING LIST" statusBar={<p>SUHRINHUH</p>}>
         <div className="p-md gap-y-xs hide-scrollbar flex h-40 flex-col overflow-scroll">
           {Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="border-win-border p-xs flex border-2">
+            <div key={i} className="border-outlined-light p-xs flex border-2">
               <p className="text-body-xs flex-1 truncate">Please insert a title of a product.</p>
               <PixelButton variant="muted" className="text-body-xs h-[20px]">
                 Save
@@ -33,7 +33,7 @@ export default function AdminContainer() {
       <PixelWindow title="RECEIVED LIST" statusBar={<p>SUHRINHUH</p>}>
         <div className="p-md gap-y-xs flex flex-col">
           {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="border-win-border p-xs flex border-2">
+            <div key={i} className="border-outlined-light p-xs flex border-2">
               <p className="text-body-xs flex-1 truncate">Please insert a title of a product.</p>
               <PixelButton className="text-body-xs h-[20px]">Waiting</PixelButton>
             </div>

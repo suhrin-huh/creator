@@ -107,20 +107,20 @@ export default function ProductSearchAreaSearchArea({
           value={keyword}
           onChange={handleChange}
           placeholder="제품을 검색해보세요."
-          className="bg-input-bg border-btn-border font-ko text-text-main placeholder:text-text-muted focus:border-text-main flex-1 border-2 px-2.5 py-1.5 text-[13px] outline-none"
+          className="bg-input-bg border-primary font-ko text-text-main placeholder:text-text-muted focus:border-text-main flex-1 border-2 px-2.5 py-1.5 text-[13px] outline-none"
           aria-label="제품 검색"
         />
 
         {/* 클리어 버튼 */}
         <button
           onClick={handleClear}
-          className="border-btn-border bg-win-bg flex h-6.5 w-6.5 shrink-0 cursor-pointer items-center justify-center border-2 shadow-[inset_1px_1px_0_rgba(255,255,255,0.8),inset_-1px_-1px_0_rgba(80,100,180,0.15)] hover:bg-[#d0daff]"
+          className="border-primary bg-primary-light flex h-6.5 w-6.5 shrink-0 cursor-pointer items-center justify-center border-2 shadow-[inset_1px_1px_0_rgba(255,255,255,0.8),inset_-1px_-1px_0_rgba(80,100,180,0.15)] hover:bg-[#d0daff]"
           aria-label="검색어 지우기"
         >
           <ClearIcon />
         </button>
       </div>
-      <div className="divide-win-border divide-y">
+      <div className="divide-outlined-light divide-y">
         {filteredList.length === 0 ? (
           <div className="font-pixel text-text-muted text-body-xs py-8 text-center leading-[2.5]">
             ✕ no results found

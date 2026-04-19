@@ -162,13 +162,13 @@ export default function SponsorshipListContent() {
             },
             // 행 호버 효과
             "& .MuiDataGrid-row:hover": {
-              backgroundColor: "var(--color-win-bg)",
+              backgroundColor: "var(--color-primary-light)",
             },
             // 선택된 행
             "& .MuiDataGrid-row.Mui-selected": {
-              backgroundColor: "var(--color-win-bg)",
+              backgroundColor: "var(--color-primary-light)",
               "&:hover": {
-                backgroundColor: "var(--color-win-border)", // 호버 시 조금 더 진하게
+                backgroundColor: "var(--color-outlined-light)", // 호버 시 조금 더 진하게
               },
             },
           }}
