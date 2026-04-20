@@ -100,21 +100,20 @@ export default function ProductSearchAreaSearchArea({
         <span className="flex h-5 w-5 shrink-0 items-center justify-center">
           <SearchIcon />
         </span>
-
         {/* 검색 입력 */}
         <input
           type="text"
           value={keyword}
           onChange={handleChange}
           placeholder="제품을 검색해보세요."
-          className="bg-input-bg border-primary font-ko text-text-main placeholder:text-text-muted focus:border-text-main flex-1 border-2 px-2.5 py-1.5 text-[13px] outline-none"
+          className="border-primary font-ko text-foreground-main placeholder:text-foreground-muted focus:border-primary-outlined flex-1 border-2 bg-white px-2.5 py-1.5 text-[13px] outline-none"
           aria-label="제품 검색"
         />
 
         {/* 클리어 버튼 */}
         <button
           onClick={handleClear}
-          className="border-primary bg-primary-light flex h-6.5 w-6.5 shrink-0 cursor-pointer items-center justify-center border-2 shadow-[inset_1px_1px_0_rgba(255,255,255,0.8),inset_-1px_-1px_0_rgba(80,100,180,0.15)] hover:bg-[#d0daff]"
+          className="border-primary bg-primary-light hover:bg-primary-hover/30 flex h-6.5 w-6.5 shrink-0 cursor-pointer items-center justify-center border-2 shadow-[inset_1px_1px_0_rgba(255,255,255,0.8),inset_-1px_-1px_0_rgba(80,100,180,0.15)]"
           aria-label="검색어 지우기"
         >
           <ClearIcon />
@@ -122,7 +121,7 @@ export default function ProductSearchAreaSearchArea({
       </div>
       <div className="divide-outlined-light divide-y">
         {filteredList.length === 0 ? (
-          <div className="font-pixel text-text-muted text-body-xs py-8 text-center leading-[2.5]">
+          <div className="font-pixel text-foreground-muted text-body-xs py-8 text-center leading-[2.5]">
             ✕ no results found
             <br />
             다른 키워드로 검색해보세요
@@ -132,7 +131,7 @@ export default function ProductSearchAreaSearchArea({
             <Link
               key={`product-card-${product.id}`}
               href={product.purchaseUrl}
-              className="p-sm gap-lg hover:bg-text-muted/10 active:bg-text-muted/20 flex w-full flex-row items-center transition-all duration-200"
+              className="p-sm gap-lg hover:bg-primary-muted active:bg-primary-muted flex w-full flex-row items-center transition-all duration-200"
             >
               <div className="p-sm relative h-20 w-20 shrink-0 overflow-hidden rounded-md bg-gray-50 md:h-24 md:w-24">
                 {/* TODO: 이미지 대체 아이콘 추가 필요 */}
@@ -145,8 +144,12 @@ export default function ProductSearchAreaSearchArea({
                 />
               </div>
               <div className="gap-xs flex h-full min-w-0 flex-1 flex-col">
-                <h3 className="text-body-sm text-text-main truncate font-bold">{product.title}</h3>
-                <p className="text-body-xs text-text-muted line-clamp-3">{product.description}</p>
+                <h3 className="text-body-sm text-foreground-main truncate font-bold">
+                  {product.title}
+                </h3>
+                <p className="text-body-xs text-foreground-muted line-clamp-3">
+                  {product.description}
+                </p>
               </div>
             </Link>
           ))

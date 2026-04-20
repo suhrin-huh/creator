@@ -23,7 +23,9 @@ export default function LoginContainer() {
     <main className="m-auto h-100 max-w-125 min-w-78">
       <PixelWindow title="LOGIN.EXE" statusBar={<p>Please~~</p>}>
         <div className="gap-md p-md flex flex-col">
-          <h1 className="text-text-main text-body-lg font-pixel mb-6 text-center">ADMIN ACCESS</h1>
+          <h1 className="text-foreground-main text-body-lg font-pixel mb-6 text-center">
+            ADMIN ACCESS
+          </h1>
           <div className="flex justify-center">
             <LockIcon />
           </div>

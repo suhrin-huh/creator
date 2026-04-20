@@ -45,19 +45,19 @@ export default function ProfileSection() {
     <PixelWindow title="PROFILE_INFO.EXE" statusBar={<span>✦ P loaded</span>}>
       <div className="p-md flex flex-col items-center gap-3 text-center">
         {/* 아바타 */}
-        <div className="pixel-avatar">
+        <div className="border-pixel border-primary bg-primary-outlined flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-full shadow-[3px_3px_0_rgba(90,110,180,0.2)]">
           <Image src={PROFILE_INFO.image.src} alt={PROFILE_INFO.image.alt} />
         </div>
         {/* 이름 및 이메일 */}
-        <div className="text-text-muted flex items-center gap-1.5 text-xs">
-          <h1 className="text-text-main text-[22px] font-bold">{PROFILE_INFO.name}</h1>
+        <div className="text-foreground-muted flex items-center gap-1.5 text-xs">
+          <h1 className="text-foreground-main text-[22px] font-bold">{PROFILE_INFO.name}</h1>
           <div className="relative h-6 w-6">
             <Image src={MailPixelIcon} alt="이메일 아이콘" fill />
           </div>
-          <span className="">{PROFILE_INFO.email}</span>
+          <span>{PROFILE_INFO.email}</span>
         </div>
         {/* 소개 */}
-        <p className="text-text-main max-w-[480px] text-[13px] leading-relaxed">
+        <p className="text-foreground-main max-w-[480px] text-[13px] leading-relaxed">
           {PROFILE_INFO.bio.split("\n").map((line, i) => (
             <span key={i}>
               {line}

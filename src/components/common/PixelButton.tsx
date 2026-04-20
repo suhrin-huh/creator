@@ -15,6 +15,7 @@ export type PixelButtonVariant =
   | "warning" // 노랑 — 주의 필요 액션 (수정, 임시저장)
   | "ghost" // 반투명 — 강조 없는 액션 (닫기, 뒤로가기)
   | "muted"; // disabled 상태 또는 비활성 UI에 사용, hover/active 효과 없음 — 의도적으로 상호작용 불가 느낌 표현
+// TODO: outlined 버튼도 만들면 좋을듯!
 
 const VARIANT_STYLES: Record<PixelButtonVariant, { classes: string }> = {
   primary: {
