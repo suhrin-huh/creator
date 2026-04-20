@@ -14,46 +14,53 @@ export type PixelButtonVariant =
   | "danger" // 빨강 — 파괴적 액션 (삭제, 취소)
   | "warning" // 노랑 — 주의 필요 액션 (수정, 임시저장)
   | "ghost" // 반투명 — 강조 없는 액션 (닫기, 뒤로가기)
-  | "muted"; // disabled 상태 또는 비활성 UI에 사용, hover/active 효과 없음 — 의도적으로 상호작용 불가 느낌 표현
+  | "muted" // disabled 상태 또는 비활성 UI에 사용, hover/active 효과 없음 — 의도적으로 상호작용 불가 느낌 표현
+  | "outlined"; // 테두리만 존재하는 버튼
 // TODO: outlined 버튼도 만들면 좋을듯!
 
 const VARIANT_STYLES: Record<PixelButtonVariant, { classes: string }> = {
   primary: {
     classes:
-      "bg-[#6677aa] border-[#4a5588] text-white " +
+      "bg-primary-dark border-primary text-white " +
       "shadow-[inset_1px_1px_0_rgba(255,255,255,0.35),2px_2px_0_rgba(40,50,120,0.25),4px_4px_0_rgba(0,0,0,0.1)] " +
       "hover:shadow-[inset_1px_1px_0_rgba(255,255,255,0.35),3px_3px_0_rgba(40,50,120,0.3),5px_5px_0_rgba(0,0,0,0.1)]",
   },
   secondary: {
     classes:
-      "bg-[#6a8c3c] border-[#4a6c1c] text-white " +
+      "bg-secondary border-secondary-dark text-white " +
       "shadow-[inset_1px_1px_0_rgba(255,255,255,0.35),2px_2px_0_rgba(50,80,20,0.25),4px_4px_0_rgba(0,0,0,0.1)] " +
       "hover:shadow-[inset_1px_1px_0_rgba(255,255,255,0.35),3px_3px_0_rgba(50,80,20,0.3),5px_5px_0_rgba(0,0,0,0.1)]",
   },
   danger: {
     classes:
-      "bg-[#c84848] border-[#a03030] text-white " +
+      "bg-danger border-danger-dark text-white " +
       "shadow-[inset_1px_1px_0_rgba(255,255,255,0.35),2px_2px_0_rgba(120,20,20,0.25),4px_4px_0_rgba(0,0,0,0.1)] " +
       "hover:shadow-[inset_1px_1px_0_rgba(255,255,255,0.35),3px_3px_0_rgba(120,20,20,0.3),5px_5px_0_rgba(0,0,0,0.1)]",
   },
   warning: {
     classes:
-      "bg-[#d4a020] border-[#a87810] text-[#3a2000] " +
+      "bg-warning border-warning-dark text-foreground-main " +
       "shadow-[inset_1px_1px_0_rgba(255,255,255,0.35),2px_2px_0_rgba(120,80,0,0.25),4px_4px_0_rgba(0,0,0,0.1)] " +
       "hover:shadow-[inset_1px_1px_0_rgba(255,255,255,0.35),3px_3px_0_rgba(120,80,0,0.3),5px_5px_0_rgba(0,0,0,0.1)]",
   },
   ghost: {
     classes:
-      "bg-[rgba(255,255,255,0.12)] border-[#8899cc] text-[#2a3a6e] " +
+      "bg-white/15 border-primary-outlined-light text-foreground-main " +
       "shadow-[inset_1px_1px_0_rgba(255,255,255,0.5),2px_2px_0_rgba(90,110,180,0.15),4px_4px_0_rgba(0,0,0,0.06)] " +
       "hover:shadow-[inset_1px_1px_0_rgba(255,255,255,0.5),3px_3px_0_rgba(90,110,180,0.2),5px_5px_0_rgba(0,0,0,0.06)] " +
-      "hover:bg-[rgba(255,255,255,0.25)]",
+      "hover:bg-white/25",
   },
   muted: {
     classes:
-      "bg-[#9a9a9a] border-[#707070] text-[#e0e0e0] " +
+      "bg-muted border-muted-dark text-foreground-main " +
       "shadow-[inset_1px_1px_0_rgba(255,255,255,0.2),2px_2px_0_rgba(0,0,0,0.15),4px_4px_0_rgba(0,0,0,0.08)] " +
       "cursor-not-allowed pointer-events-none",
+  },
+  outlined: {
+    classes:
+      "bg-primary-light border-primary text-foreground-main" +
+      "shadow-[inset_1px_1px_0_rgba(255,255,255,0.5),2px_2px_0_rgba(90,110,180,0.15),4px_4px_0_rgba(0,0,0,0.06)] " +
+      "hover:shadow-[inset_1px_1px_0_rgba(255,255,255,0.5),3px_3px_0_rgba(90,110,180,0.2),5px_5px_0_rgba(0,0,0,0.06)] ",
   },
 };
 

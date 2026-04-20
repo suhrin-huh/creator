@@ -27,7 +27,6 @@ const PIXEL_WINDOW_BTN_STYLE = [
   "leading-none cursor-pointer",
   // "shadow-[inset_1px_1px_0_rgba(255,255,255,0.85),inset_-1px_-1px_0_rgba(80,100,180,0.18) ",
   "image-rendering:pixelated",
-  "hover:bg-[#d0daff]",
 ].join(" ");
 
 function WinButtons({ onClose }: WinButtonsProps) {
@@ -35,13 +34,13 @@ function WinButtons({ onClose }: WinButtonsProps) {
     <div className="gap-xs flex">
       {/* 최소화 */}
       <button
-        className={`${PIXEL_WINDOW_BTN_STYLE} border-primary bg-primary-light text-foreground-main h-3.5 w-3.5 text-[6px]`}
+        className={`${PIXEL_WINDOW_BTN_STYLE} border-primary bg-primary-light hover:bg-primary/30 text-foreground-main h-3.5 w-3.5 text-[6px]`}
       >
         _
       </button>
       {/* 최대화 */}
       <button
-        className={`${PIXEL_WINDOW_BTN_STYLE} border-primary bg-primary-light text-foreground-main h-3.5 w-3.5 text-[6px]`}
+        className={`${PIXEL_WINDOW_BTN_STYLE} border-primary bg-primary-light hover:bg-primary/30 text-foreground-main h-3.5 w-3.5 text-[6px]`}
       >
         □
       </button>
