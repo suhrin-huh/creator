@@ -21,7 +21,7 @@ import "dayjs/locale/ko"; // 로케일 독립, 실행 환경에 언어셋을 세
 // --- 스타일링용 내부 컴포넌트 (라벨, 에러메시지) ---
 const Label = ({ required, children }: { required?: boolean; children: React.ReactNode }) => (
   <p className="text- mb-1 text-sm font-bold">
-    <span className="font-pixel text-text-main">{children}</span>{" "}
+    <span className="font-pixel text-foreground-main">{children}</span>{" "}
     {required && <span className="text-red-500">*</span>}
   </p>
 );
