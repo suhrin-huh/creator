@@ -20,61 +20,69 @@ export type PixelButtonVariant =
 
 const VARIANT_STYLES: Record<PixelButtonVariant, { classes: string }> = {
   primary: {
-    classes:
-      "bg-primary-dark border-primary text-white " +
-      "shadow-[inset_1px_1px_0_rgba(255,255,255,0.35),2px_2px_0_rgba(40,50,120,0.25),4px_4px_0_rgba(0,0,0,0.1)] " +
+    classes: [
+      "bg-primary-dark border-primary text-white",
+      "shadow-[inset_1px_1px_0_rgba(255,255,255,0.35),2px_2px_0_rgba(40,50,120,0.25),4px_4px_0_rgba(0,0,0,0.1)]",
       "hover:shadow-[inset_1px_1px_0_rgba(255,255,255,0.35),3px_3px_0_rgba(40,50,120,0.3),5px_5px_0_rgba(0,0,0,0.1)]",
+    ].join(" "),
   },
   secondary: {
-    classes:
-      "bg-secondary border-secondary-dark text-white " +
-      "shadow-[inset_1px_1px_0_rgba(255,255,255,0.35),2px_2px_0_rgba(50,80,20,0.25),4px_4px_0_rgba(0,0,0,0.1)] " +
+    classes: [
+      "bg-secondary border-secondary-dark text-white",
+      "shadow-[inset_1px_1px_0_rgba(255,255,255,0.35),2px_2px_0_rgba(50,80,20,0.25),4px_4px_0_rgba(0,0,0,0.1)]",
       "hover:shadow-[inset_1px_1px_0_rgba(255,255,255,0.35),3px_3px_0_rgba(50,80,20,0.3),5px_5px_0_rgba(0,0,0,0.1)]",
+    ].join(" "),
   },
   danger: {
-    classes:
-      "bg-danger border-danger-dark text-white " +
-      "shadow-[inset_1px_1px_0_rgba(255,255,255,0.35),2px_2px_0_rgba(120,20,20,0.25),4px_4px_0_rgba(0,0,0,0.1)] " +
+    classes: [
+      "bg-danger border-danger-dark text-white",
+      "shadow-[inset_1px_1px_0_rgba(255,255,255,0.35),2px_2px_0_rgba(120,20,20,0.25),4px_4px_0_rgba(0,0,0,0.1)]",
       "hover:shadow-[inset_1px_1px_0_rgba(255,255,255,0.35),3px_3px_0_rgba(120,20,20,0.3),5px_5px_0_rgba(0,0,0,0.1)]",
+    ].join(" "),
   },
   warning: {
-    classes:
-      "bg-warning border-warning-dark text-foreground-main " +
-      "shadow-[inset_1px_1px_0_rgba(255,255,255,0.35),2px_2px_0_rgba(120,80,0,0.25),4px_4px_0_rgba(0,0,0,0.1)] " +
+    classes: [
+      "bg-warning border-warning-dark text-foreground-main",
+      "shadow-[inset_1px_1px_0_rgba(255,255,255,0.35),2px_2px_0_rgba(120,80,0,0.25),4px_4px_0_rgba(0,0,0,0.1)]",
       "hover:shadow-[inset_1px_1px_0_rgba(255,255,255,0.35),3px_3px_0_rgba(120,80,0,0.3),5px_5px_0_rgba(0,0,0,0.1)]",
+    ].join(" "),
   },
   ghost: {
-    classes:
-      "bg-white/15 border-primary-outlined-light text-foreground-main " +
-      "shadow-[inset_1px_1px_0_rgba(255,255,255,0.5),2px_2px_0_rgba(90,110,180,0.15),4px_4px_0_rgba(0,0,0,0.06)] " +
-      "hover:shadow-[inset_1px_1px_0_rgba(255,255,255,0.5),3px_3px_0_rgba(90,110,180,0.2),5px_5px_0_rgba(0,0,0,0.06)] " +
+    classes: [
+      "bg-white/15 border-primary-outlined-light text-foreground-main",
+      "shadow-[inset_1px_1px_0_rgba(255,255,255,0.5),2px_2px_0_rgba(90,110,180,0.15),4px_4px_0_rgba(0,0,0,0.06)]",
+      "hover:shadow-[inset_1px_1px_0_rgba(255,255,255,0.5),3px_3px_0_rgba(90,110,180,0.2),5px_5px_0_rgba(0,0,0,0.06)]",
       "hover:bg-white/25",
+    ].join(" "),
   },
   muted: {
-    classes:
-      "bg-muted border-muted-dark text-foreground-main " +
-      "shadow-[inset_1px_1px_0_rgba(255,255,255,0.2),2px_2px_0_rgba(0,0,0,0.15),4px_4px_0_rgba(0,0,0,0.08)] " +
+    classes: [
+      "bg-muted border-muted-dark text-foreground-main",
+      "shadow-[inset_1px_1px_0_rgba(255,255,255,0.2),2px_2px_0_rgba(0,0,0,0.15),4px_4px_0_rgba(0,0,0,0.08)]",
       "cursor-not-allowed pointer-events-none",
+    ].join(" "),
   },
   outlined: {
-    classes:
-      "bg-primary-light border-primary text-foreground-main" +
-      "shadow-[inset_1px_1px_0_rgba(255,255,255,0.5),2px_2px_0_rgba(90,110,180,0.15),4px_4px_0_rgba(0,0,0,0.06)] " +
+    classes: [
+      "bg-primary-light border-primary text-foreground-mai",
+      "shadow-[inset_1px_1px_0_rgba(255,255,255,0.5),2px_2px_0_rgba(90,110,180,0.15),4px_4px_0_rgba(0,0,0,0.06)]",
       "hover:shadow-[inset_1px_1px_0_rgba(255,255,255,0.5),3px_3px_0_rgba(90,110,180,0.2),5px_5px_0_rgba(0,0,0,0.06)] ",
+    ].join(" "),
   },
 };
 
 // ── 공통 베이스 클래스 (색상 제외) ──────────
-const PIXEL_BTN_BASE =
-  "inline-flex items-center gap-1.5 py-2 px-4.5 " +
-  "font-pixel text-[7px] border-2 " +
-  "cursor-pointer no-underline relative [image-rendering:pixelated] " +
-  "transition-[transform,box-shadow] duration-[60ms] " +
-  "before:content-[''] before:absolute before:top-0.75 before:left-0.75 before:right-0.75 " +
-  "before:h-0.5 before:bg-white/35 before:pointer-events-none " +
-  "hover:-translate-x-px hover:-translate-y-px " +
-  "active:translate-x-0.5 active:translate-y-0.5 active:shadow-none " +
-  "disabled:opacity-60 disabled:cursor-not-allowed disabled:translate-x-0 disabled:translate-y-0";
+const PIXEL_BTN_BASE = [
+  "inline-flex items-center gap-1.5 py-2 px-4.5",
+  "font-pixel text-[7px] border-pixel",
+  "cursor-pointer no-underline relative [image-rendering:pixelated]",
+  "transition-[transform,box-shadow] duration-[60ms]",
+  "before:content-[''] before:absolute before:top-0.75 before:left-0.75 before:right-0.75",
+  "before:h-0.5 before:bg-white/35 before:pointer-events-none",
+  "hover:-translate-x-px hover:-translate-y-px",
+  "active:translate-x-0.5 active:translate-y-0.5 active:shadow-none",
+  "disabled:opacity-60 disabled:cursor-not-allowed disabled:translate-x-0 disabled:translate-y-0",
+].join(" ");
 
 // ── Props ───────────────────────────────────
 interface BaseProps {

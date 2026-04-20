@@ -2,18 +2,19 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const PIXEL_BTN_BASE =
-  "inline-flex items-center justify-center gap-1.5 py-2 px-4.5 " +
-  "bg-primary-outlined text-white font-pixel text-[7px] " +
-  "border-2 border-[#4a6c1c] " +
-  "shadow-[inset_1px_1px_0_rgba(255,255,255,0.35),2px_2px_0_rgba(50,80,20,0.25),4px_4px_0_rgba(0,0,0,0.1)] " +
-  "cursor-pointer no-underline relative [image-rendering:pixelated] " +
-  "transition-[transform,box-shadow] duration-[60ms] " +
-  "before:content-[''] before:absolute before:top-0.75 before:left-0.75 before:right-0.75 before:h-0.5 before:bg-white/35 before:pointer-events-none before:z-10 " +
-  "hover:-translate-x-px hover:-translate-y-px " +
-  "hover:shadow-[inset_1px_1px_0_rgba(255,255,255,0.35),3px_3px_0_rgba(50,80,20,0.3),5px_5px_0_rgba(0,0,0,0.1)] " +
-  "active:translate-x-0.5 active:translate-y-0.5 active:shadow-none " +
-  "disabled:cursor-not-allowed disabled:opacity-85 disabled:translate-x-0 disabled:translate-y-0 disabled:shadow-[inset_1px_1px_0_rgba(255,255,255,0.35),2px_2px_0_rgba(50,80,20,0.25),4px_4px_0_rgba(0,0,0,0.1)]";
+const PIXEL_BTN_BASE = [
+  "inline-flex items-center justify-center gap-1.5 py-2 px-4.5",
+  "bg-primary-outlined text-white font-pixel text-[7px]",
+  "border-2 border-[#4a6c1c]",
+  "shadow-[inset_1px_1px_0_rgba(255,255,255,0.35),2px_2px_0_rgba(50,80,20,0.25),4px_4px_0_rgba(0,0,0,0.1)]",
+  "cursor-pointer no-underline relative [image-rendering:pixelated]",
+  "transition-[transform,box-shadow] duration-[60ms]",
+  "before:content-[''] before:absolute before:top-0.75 before:left-0.75 before:right-0.75 before:h-0.5 before:bg-white/35 before:pointer-events-none before:z-10",
+  "hover:-translate-x-px hover:-translate-y-px",
+  "hover:shadow-[inset_1px_1px_0_rgba(255,255,255,0.35),3px_3px_0_rgba(50,80,20,0.3),5px_5px_0_rgba(0,0,0,0.1)]",
+  "active:translate-x-0.5 active:translate-y-0.5 active:shadow-none",
+  "disabled:cursor-not-allowed disabled:opacity-85 disabled:translate-x-0 disabled:translate-y-0 disabled:shadow-[inset_1px_1px_0_rgba(255,255,255,0.35),2px_2px_0_rgba(50,80,20,0.25),4px_4px_0_rgba(0,0,0,0.1)]",
+].join(" ");
 
 function BouncingText({ chars, isAnimating }: { chars: string[]; isAnimating: boolean }) {
   return (
