@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getAdminProducts, getProductById, saveProduct } from "@/actions/products";
+import { getAdminProducts, getProductById, saveProduct, deleteProduct } from "@/actions/products";
 import type { ActionState } from "@/types";
 
 // Query Keys
@@ -39,6 +39,25 @@ export function useProductDetail(productId: number) {
     enabled: !!productId,
     staleTime: 1000 * 60 * 10, // 10분
     gcTime: 1000 * 60 * 30, // 30분
+  });
+}
+
+/**
+ * 제품 삭제 mutation hook
+ */
+export function useDeleteProductMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (productId: number): Promise<ActionState> => {
+      return await deleteProduct(productId);
+    },
+    onSuccess: (data, productId) => {
+      if (data.success) {
+        queryClient.invalidateQueries({ queryKey: productKeys.lists() });
+        queryClient.removeQueries({ queryKey: productKeys.detail(productId) });
+      }
+    },
   });
 }
 
