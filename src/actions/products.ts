@@ -224,6 +224,42 @@ export async function getAdminProducts(): Promise<AdminProduct[]> {
   });
 }
 
+/** 제품 삭제
+ * @param productId 제품 PK
+ */
+export async function deleteProduct(productId: number): Promise<ActionState> {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+
+  if (authError || !user) {
+    return { success: false, message: "로그인이 필요한 서비스입니다." };
+  }
+
+  const { error } = await supabase
+    .from("products")
+    .delete()
+    .eq("id", productId)
+    .eq("user_id", user.id);
+
+  if (error) {
+    console.error("Product delete error:", error);
+    return { success: false, message: "제품 삭제에 실패했습니다." };
+  }
+
+  /**
+   * 목록 조회를 TanStack Query(useAdminProducts)로 하고 있음
+   * => 실질적인 UI 갱신은 invalidateQueries가 담당
+   * revalidatePath는 SSR/RSC 레이어의 캐시를 위한 추가 방어선 역할
+   */
+  revalidatePath("/sponsorship");
+
+  return { success: true, message: "성공적으로 삭제되었습니다." };
+}
+
 /** admin 제품 개별 데이터 조회 */
 export async function getProductById(productId: number): Promise<ProductWithDetail | null> {
   const supabase = await createClient();
