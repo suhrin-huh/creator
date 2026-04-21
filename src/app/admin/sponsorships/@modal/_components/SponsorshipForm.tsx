@@ -59,6 +59,7 @@ interface SponsorshipFormProps {
   onImageRemove: () => void;
   onSubmit: (e: React.FormEvent) => void;
   onCancel: () => void;
+  onDelete?: () => void;
 }
 
 export default function SponsorshipForm({
@@ -78,6 +79,7 @@ export default function SponsorshipForm({
   onImageRemove,
   onSubmit,
   onCancel,
+  onDelete,
 }: SponsorshipFormProps) {
   const isSponsored = productFormData.productType === "SPONSORED";
 
@@ -256,13 +258,22 @@ export default function SponsorshipForm({
       </div>
 
       {/* Footer */}
-      <div className="flex shrink-0 justify-end gap-3 border-t bg-gray-50 p-4">
-        <Button size="sm" colorTheme="outlined" onClick={onCancel} disabled={isPending}>
-          취소
-        </Button>
-        <Button size="sm" colorTheme="accent" disabled={isPending} type="submit">
-          {isPending ? "저장 중..." : "저장하기"}
-        </Button>
+      <div className="flex shrink-0 justify-between border-t bg-gray-50 p-4">
+        <div>
+          {!isNewMode && onDelete && (
+            <Button size="sm" colorTheme="danger" onClick={onDelete} disabled={isPending}>
+              삭제
+            </Button>
+          )}
+        </div>
+        <div className="flex gap-3">
+          <Button size="sm" colorTheme="outlined" onClick={onCancel} disabled={isPending}>
+            취소
+          </Button>
+          <Button size="sm" colorTheme="outlined" disabled={isPending} type="submit">
+            {isPending ? "저장 중..." : "저장하기"}
+          </Button>
+        </div>
       </div>
     </form>
   );

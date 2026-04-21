@@ -5,6 +5,7 @@ import { useSearchParams, useRouter, usePathname } from "next/navigation";
 
 // hook
 import { useProductForm } from "@/hooks/useProductForm";
+import { useDeleteProductMutation } from "@/hooks/useProducts";
 
 // component
 import SponsorshipForm from "./SponsorshipForm";
@@ -27,6 +28,18 @@ export default function SponsorshipModalContent() {
     params.delete("action");
     params.delete("productId");
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  };
+
+  const deleteMutation = useDeleteProductMutation();
+
+  const handleDelete = () => {
+    if (!productId) return;
+    deleteMutation.mutate(Number(productId), {
+      onSuccess: (data) => {
+        alert(data.message);
+        if (data.success) handleClose();
+      },
+    });
   };
 
   const {
@@ -75,6 +88,7 @@ export default function SponsorshipModalContent() {
         onImageRemove={handleImageRemove}
         onSubmit={handleSubmit}
         onCancel={handleClose}
+        onDelete={isEditMode ? handleDelete : undefined}
       />
     </div>
   );
