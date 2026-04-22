@@ -1,5 +1,27 @@
 import type { ProductFormData, SponsorshipDetailFormData } from "@/types";
 
+export const PRODUCT_TYPE_OPTIONS = [
+  { label: "직접 구매", value: "SELF_PURCHASED" },
+  { label: "협찬/체험단", value: "SPONSORED" },
+];
+
+export const SPONSORSHIP_TYPE_OPTIONS = [
+  { label: "협찬", value: "SPONSORSHIP" },
+  { label: "체험단", value: "TRIAL" },
+];
+
+export const SPONSORSHIP_CONTENT_TYPE_OPTIONS = [
+  { label: "피드", value: "FEED" },
+  { label: "릴스", value: "REEL" },
+  { label: "스토리", value: "STORY" },
+];
+
+export const SPONSORSHIP_STATUS_OPTIONS = [
+  { label: "대기중", value: "WAITING" },
+  { label: "수령완료", value: "RECEIVED" },
+  { label: "업로드완료", value: "COMPLETED" },
+];
+
 export const INITIAL_PRODUCT_FORM_DATA: ProductFormData = {
   productType: "SPONSORED",
   title: "",
@@ -22,25 +44,3 @@ export const INITIAL_SPONSORSHIP_DETAIL_FORM_DATA: SponsorshipDetailFormData = {
   retentionMonths: "",
   status: "WAITING",
 };
-
-export const PRODUCT_TYPE_OPTIONS = [
-  { label: "직접 구매", value: "SELF_PURCHASED" },
-  { label: "협찬/체험단", value: "SPONSORED" },
-];
-
-export const SPONSORSHIP_TYPE_OPTIONS = [
-  { label: "협찬", value: "SPONSORSHIP" },
-  { label: "체험단", value: "TRIAL" },
-];
-
-export const SPONSORSHIP_CONTENT_TYPE_OPTIONS = [
-  { label: "피드", value: "FEED" },
-  { label: "릴스", value: "REEL" },
-  { label: "스토리", value: "STORY" },
-];
-
-export const SPONSORSHIP_STATUS_OPTIONS = [
-  { label: "대기중", value: "WAITING" },
-  { label: "수령완료", value: "RECEIVED" },
-  { label: "업로드완료", value: "COMPLETED" },
-];
