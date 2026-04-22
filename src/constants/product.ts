@@ -23,7 +23,7 @@ export const SPONSORSHIP_STATUS_OPTIONS = [
 ];
 
 export const INITIAL_PRODUCT_FORM_DATA: ProductFormData = {
-  productType: "SPONSORED",
+  productType: "SELF_PURCHASED",
   title: "",
   brandName: "",
   description: null,
