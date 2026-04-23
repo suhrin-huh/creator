@@ -34,6 +34,7 @@ export function useProductForm({ isEditMode, productId, onSuccess }: UseProductF
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [fileSize, setFileSize] = useState<number | null>(null);
   const [errors, setErrors] = useState<FormErrors>({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const mutation = useSaveProductMutation();
 
@@ -41,6 +42,7 @@ export function useProductForm({ isEditMode, productId, onSuccess }: UseProductF
   useEffect(() => {
     const fetchDetail = async () => {
       if (isEditMode && productId) {
+        setIsLoading(true);
         const data = await getProductById(Number(productId));
 
         if (data) {
@@ -72,6 +74,7 @@ export function useProductForm({ isEditMode, productId, onSuccess }: UseProductF
             setDetailFormData(INITIAL_SPONSORSHIP_DETAIL_FORM_DATA);
           }
         }
+        setIsLoading(false);
       } else {
         resetForm();
       }
@@ -247,6 +250,7 @@ export function useProductForm({ isEditMode, productId, onSuccess }: UseProductF
     previewUrl,
     fileSize,
     errors,
+    isLoading,
     isPending: mutation.isPending,
     handleProductChange,
     handleDetailChange,

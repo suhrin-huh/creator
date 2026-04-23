@@ -9,6 +9,7 @@ import { useDeleteProductMutation } from "@/hooks/useProducts";
 
 // component
 import SponsorshipForm from "./SponsorshipForm";
+import SponsorshipFormSkeleton from "./SponsorshipFormSkeleton";
 
 /** 실제 로직을 처리하는 알맹이 컴포넌트 */
 export default function SponsorshipModalContent() {
@@ -48,6 +49,7 @@ export default function SponsorshipModalContent() {
     previewUrl,
     fileSize,
     errors,
+    isLoading,
     isPending,
     handleProductChange,
     handleDetailChange,
@@ -71,25 +73,29 @@ export default function SponsorshipModalContent() {
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
       onClick={handleClose}
     >
-      <SponsorshipForm
-        productFormData={productFormData}
-        detailFormData={detailFormData}
-        previewUrl={previewUrl}
-        fileSize={fileSize}
-        errors={errors}
-        isPending={isPending}
-        isNewMode={isNewMode}
-        onProductChange={handleProductChange}
-        onDetailChange={handleDetailChange}
-        onProductDateChange={handleProductDateChange}
-        onDetailDateChange={handleDetailDateChange}
-        onContentTypeToggle={handleContentTypeToggle}
-        onImageChange={handleImageChange}
-        onImageRemove={handleImageRemove}
-        onSubmit={handleSubmit}
-        onCancel={handleClose}
-        onDelete={isEditMode ? handleDelete : undefined}
-      />
+      {isLoading ? (
+        <SponsorshipFormSkeleton />
+      ) : (
+        <SponsorshipForm
+          productFormData={productFormData}
+          detailFormData={detailFormData}
+          previewUrl={previewUrl}
+          fileSize={fileSize}
+          errors={errors}
+          isPending={isPending}
+          isNewMode={isNewMode}
+          onProductChange={handleProductChange}
+          onDetailChange={handleDetailChange}
+          onProductDateChange={handleProductDateChange}
+          onDetailDateChange={handleDetailDateChange}
+          onContentTypeToggle={handleContentTypeToggle}
+          onImageChange={handleImageChange}
+          onImageRemove={handleImageRemove}
+          onSubmit={handleSubmit}
+          onCancel={handleClose}
+          onDelete={isEditMode ? handleDelete : undefined}
+        />
+      )}
     </div>
   );
 }
