@@ -20,7 +20,8 @@ export async function recordActiveView(): Promise<ActionState> {
   // 접속 기기 파악을 위한 user-agent 수집
   const userAgent = headerList.get("user-agent") || "unknown";
 
-  const { error } = await supabase.rpc("record_page_view", {
+  const isDevMode = process.env.NODE_ENVIRONMENT === "dev";
+  const { error } = await supabase.rpc(isDevMode ? "record_page_view_dev" : "record_page_view", {
     p_path: "/", // 현재에는 메인페이지만 조회 기록 사용
     p_ua: userAgent,
   });
