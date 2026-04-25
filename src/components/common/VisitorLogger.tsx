@@ -10,6 +10,18 @@ export default function VisitorLogger() {
   const VIEW_THRESHOLD = 3000; // 3초
 
   useEffect(() => {
+    // supabase가 생성한 토큰은 'sb-[프로젝트ID]-auth-token' 형태
+    const hasSupabaseToken = document.cookie
+      .split(";")
+      .some((item) => item.trim().startsWith("sb-") && item.includes("-auth-token"));
+
+    console.log(hasSupabaseToken);
+
+    if (hasSupabaseToken) {
+      console.log("Admin 접속 - 조회수 집계 제외");
+      return;
+    }
+
     const startTimer = () => {
       // 이미 이 페이지 로드에서 카운트했다면 타이머를 시작하지 않음
       if (hasCountedInThisLoad) return;
